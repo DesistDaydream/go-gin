@@ -14,14 +14,14 @@ import (
 
 // QueryGet 查询页面 GET 请求处理
 func QueryGet(c *gin.Context) {
-	commodity := new(db.Commodity)
-	commodity.QueryData(c)
+	order := new(db.Order)
+	order.QueryData(c)
 	// 页面展示处理
 	h := gin.H{
-		"products":    db.Products,
-		"sizes":       db.Sizes,
-		"amounts":     db.Amounts,
-		"createTimes": db.CreateTimes,
+		"provider": db.Providers,
+		"products": db.Products,
+		"sizes":    db.Sizes,
+		"amounts":  db.Amounts,
 	}
 	c.HTML(http.StatusOK, "query.html", h)
 }

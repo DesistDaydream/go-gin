@@ -26,8 +26,8 @@ func StockInPost(c *gin.Context) {
 		if matchResult, _ := regexp.MatchString("[1-9]+", c.PostForm("amount")); matchResult == false {
 			c.String(http.StatusOK, "请填写大于0的正整数")
 		} else {
-			commodity := new(database.Commodity)
-			commodity.AddData(c)
+			order := new(database.Order)
+			order.AddData(c)
 			c.HTML(http.StatusOK, "stock-in.html", gin.H{
 				"result": "入库请求已受理！恭喜进货！",
 			})

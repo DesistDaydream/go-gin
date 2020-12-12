@@ -6,7 +6,8 @@
 <body>
   {{ .result }}
 
-  <form action="/stock-in" method="post"> 
+  <form action="/stock-in" method="post">
+    供应商:<input type="text" name="provider" maxlength="3" style="width:40px">
     <select name="product">
       <option value="果C精品">果C精品</option>
       <option value="新款丝薄">新款丝薄</option>
@@ -24,7 +25,7 @@
       <option value="XXXL">XXXL</option>
     </select>
     
-    数量:<input type="text" name="amount" maxlength="3" style="width:30px">  
+    数量:<input type="text" name="amount" maxlength="3" style="width:30px">
     <br>
 
     <input type="submit" name="button" value="入库">

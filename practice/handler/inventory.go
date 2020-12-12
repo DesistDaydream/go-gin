@@ -13,14 +13,13 @@ import (
 
 // CommodityGet 查询页面 GET 请求处理
 func CommodityGet(c *gin.Context) {
-	commodity := new(database.Commodity)
-	commodity.QueryData(c)
+	order := new(database.Order)
+	order.QueryData(c)
 	// 页面展示处理
 	h := gin.H{
-		"products":    database.Products,
-		"sizes":       database.Sizes,
-		"amounts":     database.Amounts,
-		"createTimes": database.CreateTimes,
+		"products": database.Products,
+		"sizes":    database.Sizes,
+		"amounts":  database.Amounts,
 	}
 	c.HTML(http.StatusOK, "inventory.html", h)
 }

@@ -42,6 +42,7 @@
     <table border="1" class="table table-bordered table-hover">
       <thead>
         <tr>
+          <th>供应商</th>
           <th>类型</th>
           <th>尺寸</th>
           <th>订单数量</th>
@@ -50,6 +51,7 @@
       </thead>
       <tbody>
         <tr>
+          <td>{{ range $i,$v := .provider }}{{$v}}<br>{{end}}</td>
           <td>{{ range $i,$v := .products }}{{$v}}<br>{{end}}</td>
           <td>{{ range $i,$v := .sizes }}{{$v}}<br>{{end}}</td>
           <td>{{ range $i,$v := .amounts }}{{$v}}<br>{{end}}</td>
