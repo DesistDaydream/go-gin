@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/DesistDaydream/GoGin/practice/routeset"
+	"github.com/DesistDaydream/GoGin/practice/routerset"
 
 	"github.com/gin-gonic/gin"
 )
