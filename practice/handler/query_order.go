@@ -25,6 +25,7 @@ func handleData() (Providers []string, Products []string, Sizes []string, Amount
 
 // QueryGet 查询页面 GET 请求处理
 func QueryGet(c *gin.Context) {
+	// 从数据库中获取数据，订单的每个属性都是一个数组，以便可以轮询写入到前端展示页面的表格中
 	Providers, Products, Sizes, Amounts := handleData()
 
 	// 页面展示处理
