@@ -75,15 +75,24 @@ func (com *Commodity) AddData(c *gin.Context) {
 
 // QueryData 在 query.go 中查询数据库
 func (com *Commodity) QueryData(c *gin.Context) {
+	// 重置数据，避免后面的查询包含前一次查询内容
+	Products = make([]string, 0)
+	Sizes = make([]string, 0)
+	Amounts = make([]int, 0)
+	CreateTimes = make([]string, 0)
 	// 数据处理
 	ConnDB()
 	defer db.Close()
+
 	var Commodities []Commodity
 	db.Find(&Commodities)
-	// fmt.Println("数据库中的数据为：", Commodities)
-	for _, a := range Commodities {
-		fmt.Println(a)
+	for _, commodity := range Commodities {
+		Products = append(Products, commodity.Product)
+		Sizes = append(Sizes, commodity.Size)
+		Amounts = append(Amounts, commodity.Amount)
 	}
+
+	fmt.Println("数据库中的数据为：", Commodities)
 }
 
 // DelData 在stock-in.go中删除数据
