@@ -18,5 +18,5 @@ func InitRouter(r *gin.Engine) {
 	r.POST("/stock-out", handler.StockOutPost)
 	r.GET("/query", handler.QueryGet)
 	r.POST("/query", handler.QueryPost)
-	r.GET("inventory", handler.InventoryGet)
+	r.GET("/inventory", handler.CommodityGet)
 }

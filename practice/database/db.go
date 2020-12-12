@@ -1,17 +1,28 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
+	"log"
 
 	"github.com/gin-gonic/gin"
 
 	// mysql驱动
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 )
 
-// Inventory 产品库存的信息，后面的描述信息用来进行数据绑定
-type Inventory struct {
+// DatabaseInfo 数据库连接信息
+type DatabaseInfo struct {
+	UserName string
+	Password string
+	Protocol string
+	Server   string
+	Port     int64
+	Database string
+}
+
+// Commodity 一个商品应该具有的属性，后面的描述信息用来进行数据绑定
+type Commodity struct {
 	Product    string `form:"product" binding:"required"`
 	Size       string `form:"size" binding:"required"`
 	Amount     int    `form:"amount" binding:"required"`
@@ -19,8 +30,6 @@ type Inventory struct {
 }
 
 var (
-	// InverntoryBind 用于将form中传递的参数与Invertory结构体中的属性绑定
-	InverntoryBind Inventory
 	// Products 产品集合，用于在前端遍历数据并逐行展示
 	Products []string
 	// Sizes 尺寸集合，用于在前端遍历数据并逐行展示
@@ -29,74 +38,57 @@ var (
 	Amounts []int
 	// CreateTimes 入库时间集合，用于在前端遍历数据并逐行展示
 	CreateTimes []string
-	// DB 123
-	db *sql.DB
+	db          *gorm.DB
 )
 
-// 数据库连接
-func dbConn() {
+// ConnDB 连接数据库
+func ConnDB() {
 	var err error
-	db, err = sql.Open("mysql", "root:mypassword@tcp(10.10.100.200:3306)/caredaily?charset=utf8")
-	CheckErr(err)
+	db, err = gorm.Open("mysql", "root:mysql@tcp(0.0.0.0:3306)/practice?charset=utf8&parseTime=True&loc=Local")
+	if err != nil {
+		log.Fatalln("failed to connect database, ", err)
+	}
+	// 刷新数据表，
+	db.AutoMigrate(&Commodity{})
 }
 
 // AddData 在stock-in.go中添加向数据库添加数据
-func (i *Inventory) AddData(c *gin.Context) {
+func (com *Commodity) AddData(c *gin.Context) {
 	fmt.Println("入库类型：", c.PostForm("product"))
 	fmt.Println("入库尺寸：", c.PostForm("size"))
 	fmt.Println("入库数量：", c.PostForm("amount"))
 
-	// 使用 gin 的绑定功能，将 Inventory 结构体中的属性与表单传入的参数绑定
-	c.ShouldBind(&InverntoryBind)
+	// 使用 gin 的绑定功能，将 Commodity 结构体中的属性与表单传入的参数绑定
+	var data Commodity
+	c.ShouldBind(&data)
 
 	// 数据处理
-	dbConn()
+	ConnDB()
 	defer db.Close()
-
-	stmt, err := db.Prepare("INSERT inventory SET product=?,size=?,amount=?")
-	CheckErr(err)
 
 	switch c.PostForm("button") {
 	case "入库":
-		_, err := stmt.Exec(InverntoryBind.Product, InverntoryBind.Size, InverntoryBind.Amount)
-		CheckErr(err)
+		db.Create(data)
 	case "出库":
-		_, err := stmt.Exec(InverntoryBind.Product, InverntoryBind.Size, -InverntoryBind.Amount)
-		CheckErr(err)
 	}
 }
 
-// QueryData 在query.go中查询数据库
-func (i *Inventory) QueryData(c *gin.Context) {
-	Products = make([]string, 0)
-	Sizes = make([]string, 0)
-	Amounts = make([]int, 0)
-	CreateTimes = make([]string, 0)
-
+// QueryData 在 query.go 中查询数据库
+func (com *Commodity) QueryData(c *gin.Context) {
 	// 数据处理
-	dbConn()
+	ConnDB()
 	defer db.Close()
-
-	rows, err := db.Query("SELECT product,size,amount,create_time FROM inventory")
-	CheckErr(err)
-
-	for rows.Next() {
-
-		err = rows.Scan(&i.Product, &i.Size, &i.Amount, &i.CreateTime)
-		CheckErr(err)
-
-		Products = append(Products, i.Product)
-		Sizes = append(Sizes, i.Size)
-		Amounts = append(Amounts, i.Amount)
-		CreateTimes = append(CreateTimes, i.CreateTime)
-
-		fmt.Println("数据库中的数据为：", *i)
+	var Commodities []Commodity
+	db.Find(&Commodities)
+	// fmt.Println("数据库中的数据为：", Commodities)
+	for _, a := range Commodities {
+		fmt.Println(a)
 	}
 }
 
 // DelData 在stock-in.go中删除数据
-func (i *Inventory) DelData(c *gin.Context) {
-	dbConn()
+func (com *Commodity) DelData(c *gin.Context) {
+	ConnDB()
 	defer db.Close()
 }
 

@@ -14,8 +14,8 @@ import (
 
 // QueryGet 查询页面 GET 请求处理
 func QueryGet(c *gin.Context) {
-	inventory := new(db.Inventory)
-	inventory.QueryData(c)
+	commodity := new(db.Commodity)
+	commodity.QueryData(c)
 	// 页面展示处理
 	h := gin.H{
 		"products":    db.Products,

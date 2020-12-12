@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	db "github.com/DesistDaydream/GoGin/practice/database"
+	"github.com/DesistDaydream/GoGin/practice/database"
 
 	"github.com/gin-gonic/gin"
 
@@ -11,16 +11,16 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// InventoryGet 查询页面 GET 请求处理
-func InventoryGet(c *gin.Context) {
-	inventory := new(db.Inventory)
-	inventory.QueryData(c)
+// CommodityGet 查询页面 GET 请求处理
+func CommodityGet(c *gin.Context) {
+	commodity := new(database.Commodity)
+	commodity.QueryData(c)
 	// 页面展示处理
 	h := gin.H{
-		"products":    db.Products,
-		"sizes":       db.Sizes,
-		"amounts":     db.Amounts,
-		"createTimes": db.CreateTimes,
+		"products":    database.Products,
+		"sizes":       database.Sizes,
+		"amounts":     database.Amounts,
+		"createTimes": database.CreateTimes,
 	}
 	c.HTML(http.StatusOK, "inventory.html", h)
 }
