@@ -36,7 +36,7 @@ var (
 // 数据库连接
 func dbConn() {
 	var err error
-	db, err = sql.Open("mysql", "root:mypassword@tcp(10.10.100.200:3306)/caredaily?charset=utf8")
+	db, err = sql.Open("mysql", "root:mysql@tcp(0.0.0.0:3306)/caredaily?charset=utf8")
 	CheckErr(err)
 }
 
