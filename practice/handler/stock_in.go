@@ -30,8 +30,8 @@ func StockInPost(c *gin.Context) {
 			// 使用 gin 的绑定功能，以便接收 POST 请求中的 Form Data(表单数据)。如果不绑定，则表单数据无法写入到后端。
 			c.ShouldBind(&i)
 
-			// 调用添加订单逻辑,由于上面绑定了结构体与表单，所以表单中填写的数据将会传到结构体中。
-			// 调用 AddStockInOrder() 时，也就能正常使用结构体中的数据了。
+			// 调用添加订单逻辑
+			// 由于上面绑定了结构体与表单，所以表单中填写的数据将会传到结构体中。调用 AddStockInOrder() 时，也就能正常使用结构体中的数据了。
 			i.AddStockInOrder(c)
 
 			c.HTML(http.StatusOK, "stock-in.gohtml", gin.H{
