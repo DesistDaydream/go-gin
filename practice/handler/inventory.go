@@ -13,8 +13,8 @@ import (
 
 // CommodityGet 查询页面 GET 请求处理
 func CommodityGet(c *gin.Context) {
-	order := new(database.Order)
-	order.QueryData(c)
+	order := new(database.StockInOrder)
+	order.QueryStockInOrder(c)
 	// 页面展示处理
 	h := gin.H{
 		"products": database.Products,

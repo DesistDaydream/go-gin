@@ -25,8 +25,8 @@ func StockOutPost(c *gin.Context) {
 		if matchResult, _ := regexp.MatchString("[1-9]+", c.PostForm("amount")); matchResult == false {
 			c.String(http.StatusOK, "请填写大于0的正整数")
 		} else {
-			order := new(database.Order)
-			order.AddData(c)
+			order := new(database.StockOutOrder)
+			order.AddStockOutOrder(c)
 			c.HTML(http.StatusOK, "stock-out.html", gin.H{
 				"result": "出库请求已受理！又赚钱啦！",
 			})

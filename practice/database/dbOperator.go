@@ -4,26 +4,19 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-
-	// mysql驱动
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
 )
 
-// DatabaseInfo 数据库连接信息
-type DatabaseInfo struct {
-	UserName string
-	Password string
-	Protocol string
-	Server   string
-	Port     int64
-	Database string
-}
-
-// Order 一个订单的属性，后面的描述信息用来绑定属性与表单中的字段
-type Order struct {
+// StockInOrder 入库订单的属性，后面的描述信息用来绑定属性与表单中的字段
+type StockInOrder struct {
 	// gorm.Model
 	Provider string `form:"provider" binding:"required"`
+	Commodity
+}
+
+// StockOutOrder 入库订单的属性，后面的描述信息用来绑定属性与表单中的字段
+type StockOutOrder struct {
+	// gorm.Model
+	Customer string `form:"customer" binding:"required"`
 	Commodity
 }
 
@@ -43,42 +36,31 @@ var (
 	Sizes []string
 	// Amounts 库存集合，用于在前端遍历数据并逐行展示
 	Amounts []int
-	db      *gorm.DB
 )
 
-// AddData 在 stock-in.go 中向数据库添加数据
-func (o *Order) AddData(c *gin.Context) {
-	fmt.Println("供应商", c.PostForm("provider"))
-	fmt.Println("入库类型：", c.PostForm("product"))
-	fmt.Println("入库尺寸：", c.PostForm("size"))
-	fmt.Println("入库数量：", c.PostForm("amount"))
+// AddStockInOrder 在 stock-in.go 页面中向数据库添加入库订单数据
+func (i *StockInOrder) AddStockInOrder(c *gin.Context) {
+	// 从后台检查传入的数据
+	// checkOrder(c)
 
 	// 使用 gin 的绑定功能，将 Commodity 结构体中的属性与表单传入的参数绑定，以便将表单的值应用到结构体中，不绑定的话，入库数据为空
-	c.ShouldBind(&o)
+	c.ShouldBind(&i)
 
 	// 数据处理
-	ConnDB()
-	defer db.Close()
+	db.Create(i)
 
-	switch c.PostForm("button") {
-	case "入库":
-		db.Create(o)
-	case "出库":
-	}
 }
 
-// QueryData 在 query.go 中查询数据库
-func (o *Order) QueryData(c *gin.Context) {
+// QueryStockInOrder 在 query.go 页面中查询数据库中的入库订单数据
+func (i *StockInOrder) QueryStockInOrder(c *gin.Context) {
 	// 重置数据，避免后面的查询包含前一次查询内容
 	Providers = make([]string, 0)
 	Products = make([]string, 0)
 	Sizes = make([]string, 0)
 	Amounts = make([]int, 0)
-	// 数据处理
-	ConnDB()
-	defer db.Close()
 
-	var Orders []Order
+	// 数据处理
+	var Orders []StockInOrder
 	db.Find(&Orders)
 	for _, order := range Orders {
 		Providers = append(Providers, order.Provider)
@@ -90,8 +72,14 @@ func (o *Order) QueryData(c *gin.Context) {
 	fmt.Println("数据库中的数据为：", Orders)
 }
 
-// DelData 在stock-in.go中删除数据
-func (o *Order) DelData(c *gin.Context) {
-	ConnDB()
-	defer db.Close()
+// AddStockOutOrder 在 stock-in.go 页面添加出库订单数据
+func (i *StockOutOrder) AddStockOutOrder(c *gin.Context) {
+	fmt.Println("待更新")
+}
+
+func checkOrder(c *gin.Context) {
+	fmt.Println("供应商", c.PostForm("provider"))
+	fmt.Println("入库类型：", c.PostForm("product"))
+	fmt.Println("入库尺寸：", c.PostForm("size"))
+	fmt.Println("入库数量：", c.PostForm("amount"))
 }

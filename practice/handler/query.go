@@ -14,8 +14,8 @@ import (
 
 // QueryGet 查询页面 GET 请求处理
 func QueryGet(c *gin.Context) {
-	order := new(db.Order)
-	order.QueryData(c)
+	order := new(db.StockInOrder)
+	order.QueryStockInOrder(c)
 	// 页面展示处理
 	h := gin.H{
 		"provider": db.Providers,
