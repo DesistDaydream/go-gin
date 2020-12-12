@@ -13,7 +13,7 @@ import (
 
 // StockOutGet 出库页面 GET 请求处理
 func StockOutGet(c *gin.Context) {
-	c.HTML(http.StatusOK, "stock-out.html", nil)
+	c.HTML(http.StatusOK, "stock-out.gohtml", nil)
 }
 
 // StockOutPost 出库页面 POST 请求处理
@@ -27,7 +27,7 @@ func StockOutPost(c *gin.Context) {
 		} else {
 			order := new(database.StockOutOrder)
 			order.AddStockOutOrder(c)
-			c.HTML(http.StatusOK, "stock-out.html", gin.H{
+			c.HTML(http.StatusOK, "stock-out.gohtml", gin.H{
 				"result": "出库请求已受理！又赚钱啦！",
 			})
 		}

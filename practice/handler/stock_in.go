@@ -14,7 +14,7 @@ import (
 
 // StockInGet 入库页面 GET 请求处理
 func StockInGet(c *gin.Context) {
-	c.HTML(http.StatusOK, "stock-in.html", nil)
+	c.HTML(http.StatusOK, "stock-in.gohtml", nil)
 }
 
 // StockInPost 入库页面 POST 请求处理
@@ -26,9 +26,14 @@ func StockInPost(c *gin.Context) {
 		if matchResult, _ := regexp.MatchString("[1-9]+", c.PostForm("amount")); matchResult == false {
 			c.String(http.StatusOK, "请填写大于0的正整数")
 		} else {
-			order := new(database.StockInOrder)
-			order.AddStockInOrder(c)
-			c.HTML(http.StatusOK, "stock-in.html", gin.H{
+			i := new(database.StockInOrder)
+			// 使用 gin 的绑定功能，以便接收 POST 请求中的 Form Data(表单数据)。如果不绑定，则表单数据无法写入到后端。
+			c.ShouldBind(&i)
+
+			// 调用添加订单逻辑
+			i.AddStockInOrder(c)
+
+			c.HTML(http.StatusOK, "stock-in.gohtml", gin.H{
 				"result": "入库请求已受理！恭喜进货！",
 			})
 		}

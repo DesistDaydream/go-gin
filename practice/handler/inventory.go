@@ -1,9 +1,7 @@
 package handler
 
 import (
-	"net/http"
-
-	"github.com/DesistDaydream/GoGin/practice/database"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 
@@ -13,13 +11,14 @@ import (
 
 // CommodityGet 查询页面 GET 请求处理
 func CommodityGet(c *gin.Context) {
-	order := new(database.StockInOrder)
-	order.QueryStockInOrder(c)
-	// 页面展示处理
-	h := gin.H{
-		"products": database.Products,
-		"sizes":    database.Sizes,
-		"amounts":  database.Amounts,
-	}
-	c.HTML(http.StatusOK, "inventory.html", h)
+	fmt.Println("查询库存功能待优化")
+	// order := new(database.StockInOrder)
+	// order.QueryStockInOrder(c)
+	// // 页面展示处理
+	// h := gin.H{
+	// 	"products": database.Products,
+	// 	"sizes":    database.Sizes,
+	// 	"amounts":  database.Amounts,
+	// }
+	// c.HTML(http.StatusOK, "inventory.gohtml", h)
 }

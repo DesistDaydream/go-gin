@@ -8,7 +8,7 @@ import (
 
 // OrderGet 订单页面 GET 请求处理
 func OrderGet(c *gin.Context) {
-	c.HTML(http.StatusOK, "order.html", gin.H{
+	c.HTML(http.StatusOK, "order.gohtml", gin.H{
 		"title": "订单管理系统",
 	})
 }
