@@ -12,21 +12,20 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// QueryGet 查询页面 GET 请求处理
-func QueryGet(c *gin.Context) {
-	// 重置数据，避免后面的查询包含前一次查询内容
-	// 各种数据的数组，用于在前端遍历数据并逐行展示
-	Providers := make([]string, 0)
-	Products := make([]string, 0)
-	Sizes := make([]string, 0)
-	Amounts := make([]int, 0)
-
+func handleData() (Providers []string, Products []string, Sizes []string, Amounts []int) {
+	// 调用查询逻辑，获取数据，并处理数据以便展示
 	for _, order := range database.QueryStockInOrder() {
 		Providers = append(Providers, order.Provider)
 		Products = append(Products, order.Product)
 		Sizes = append(Sizes, order.Size)
 		Amounts = append(Amounts, order.Amount)
 	}
+	return
+}
+
+// QueryGet 查询页面 GET 请求处理
+func QueryGet(c *gin.Context) {
+	Providers, Products, Sizes, Amounts := handleData()
 
 	// 页面展示处理
 	h := gin.H{
