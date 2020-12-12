@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>出库</title>
+</head>
+<body>
+  {{ .result }}
+  <form action="/stock-out" method="post">
+    客户:<input type="text" name="客户" size="4">
+
+    <select name="product">
+      <option value="果C精品">果C精品</option>
+      <option value="新款丝薄">新款丝薄</option>
+      <option value="IP小飞侠">IP小飞侠</option>
+      <option value="丝柔">丝柔</option>
+    </select>
+
+    <select name="size">
+      <option value="NB">NB</option>
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="XXL">XXL</option>
+      <option value="XXXL">XXXL</option>
+    </select>
+
+    数量:<input type="text" name="amount" style="width:30px">
+    <br>
+
+    <input type="submit" name="button" value="出库">
+    <input type="submit" name="button" value="返回">
+    <br>
+    
+    <input type="radio" name="type" value="1">纸尿裤
+    <input type="radio" name="type" value="2">拉拉裤
+
+    <input type="checkbox" name="interest" value="note1">备注1
+    <input type="checkbox" name="interest" value="note2">备注2
+    <input type="checkbox" name="interest" value="note3">备注3
+  </form>
+
+</body>
+</html>
