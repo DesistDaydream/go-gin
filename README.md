@@ -16,21 +16,19 @@ func main() {
 ```go
 package main
 import "github.com/gin-gonic/gin"
+func PingGet(c *gin.Context) {
+	c.JSON(200, gin.H{"message": "pong"})
+}
+
 func main() {
 	r := gin.Default()
 	r.GET("/ping", PingGet)
 	r.Run()
 }
-
-func PingGet(c *gin.Context) {
-	h := gin.H{
-		"message": "pong",
-	}
-
-	c.JSON(200, h)
-}
 ```
 具体含义，详解[main.go](main.go)
+
+其中 `gin.Context` 这个结构体是非常重要的，**net/http基本库** 的 `http.ResponseWriter` 与 `*http.Request` 就包含在这个结构体中，所以
 
 # Features gin的特性
 ## 绑定
