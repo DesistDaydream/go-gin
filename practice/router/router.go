@@ -14,7 +14,7 @@ func InitRouter(r *gin.Engine) {
 	r.POST("/login", handler.LoginPost)
 
 	// 为本程序注册中间件，以便后续页面都只有在认证之后才可以访问
-	r.Use(middleware.MiddleWare())
+	r.Use(middleware.AuthMiddleWare)
 	// 使用 {} 是为了代码规范，不写也可以
 	{
 		r.GET("/order", handler.OrderGet)

@@ -12,7 +12,7 @@ func main() {
 	r.Run() // 监听并在 0.0.0.0:8080 上启动服务
 }
 ```
-这是官方的入门介绍，对于编程新手来说不太友好,可以改成下面这个样子  
+这是官方的入门介绍，对于编程新手来说不太友好,可以改成下面这个样子:
 ```go
 package main
 import "github.com/gin-gonic/gin"
@@ -28,7 +28,10 @@ func main() {
 ```
 具体含义，详解[main.go](main.go)
 
-其中 `gin.Context` 这个结构体是非常重要的，**net/http基本库** 的 `http.ResponseWriter` 与 `*http.Request` 就包含在这个结构体中，所以
+其中有两个概念非常重要：
+*  `r.GET()` 用来处理 GET 的请求，一般称之为 **Handler(处理器，用来处理 http 请求的处理器)** 。还包括 r.POST、r.PUT 等等对应处理各种不同类型请求的 Handler。
+>`r.GET()` 是 `router.Handle("GET", path, handle)` 的简化版，一般也成为 路由处理器、路由注册器 等等。这种行为也成为注册路由，一般都放在一个单独目录里统一注册，再由 main() 调用
+* `gin.Context` 这个结构体是非常重要的，**net/http基本库** 的 `http.ResponseWriter` 与 `*http.Request` 就包含在这个结构体中，所以
 
 # Features gin的特性
 ## 绑定

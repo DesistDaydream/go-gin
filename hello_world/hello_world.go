@@ -23,7 +23,7 @@ func main() {
 	// 通常情况下,我们使用 gin.Defaul() 创建 Engine 实例。
 	r := gin.Default()
 
-	// gin 的 X.GET() 方法处理 GET 请求。一般称之为 handler(处理器)。还包括 X.POST、X.PUT 等等对应处理各种不同类型请求的 handler。
+	// gin 的 X.GET() 方法处理 GET 请求。一般称之为 Handler(处理器,用来处理 http 请求的处理器)。还包括 X.POST、X.PUT 等等对应处理各种不同类型请求的 Handler。
 	// 第一个参数为请求的 uri 路径，第二个参数为处理方式(i.e.当访问/ping页面时应该如何处理)
 	// 这里将 *http.Request 处理方式从 main() 中分离，直接调用 PingGet 函数。
 	r.GET("/ping", PingGet)
