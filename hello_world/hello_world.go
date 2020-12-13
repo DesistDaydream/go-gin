@@ -15,10 +15,10 @@ func PingGet(c *gin.Context) {
 }
 
 func main() {
-	// 默认可以使用 gin.Default() 和 gin.New() 创建 gin 引擎实例。区别在于 gin.Default() 也适用 gin.New() 创建 engine 实例，但是会默认使用 Logger 和 Recover 中间件。
-	// Logger 是负责进行打印并输出日志的中间件,方便开发者进行程序调试;比如当客户端访问 gin 开发的应用时，会输出本次访问的信息。
-	// Recovery 中间件的作如果程序执行过程中遇到panc中断了服务,则 Recovery会恢复程序执行,并返回服务器500内误。
-	// 通常情况下,我们使用默认的 gin.Defaul() 创建 Engine 实例。
+	// 可以使用 gin.Default() 或 gin.New() 创建 gin 引擎实例。区别在于 gin.Default() 使用 gin.New() 创建 engine 实例，并额外使用了 Logger() 和 Recover() 中间件。
+	// Logger() 是负责进行打印并输出日志的中间件,方便开发者进行程序调试;比如当客户端访问 gin 开发的应用时，会输出本次访问的信息。
+	// Recovery() 中间件的作如果程序执行过程中遇到panc中断了服务,则 Recovery会恢复程序执行,并返回服务器500内误。
+	// 通常情况下,我们使用 gin.Defaul() 创建 Engine 实例。
 	r := gin.Default()
 
 	// gin的 X.GET() 方法用来定义http的请求路由，还包括 X.POST、X.PUT 等等。第一个参数为uri路径，第二个参数为处理方式(i.e.当访问/ping页面时应该如何处理)

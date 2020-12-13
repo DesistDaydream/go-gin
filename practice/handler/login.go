@@ -10,7 +10,7 @@ import (
 // LoginGet 登录界面 GET 请求处理
 func LoginGet(c *gin.Context) {
 	c.HTML(http.StatusOK, "login.gohtml", gin.H{
-		"title": "Hello zhangna",
+		"title": "Hello Care Dailyer",
 	})
 }
 
