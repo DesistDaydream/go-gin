@@ -1,7 +1,7 @@
 # Gin 框架实现 Middleware(中间件)
 ![](https://raw.githubusercontent.com/DesistDaydream/PictureHosting/main/GoWeb/middleware.png)
 
-加入我现在用 gin 框架实现了两个路由
+假如我现在用 gin 框架实现了两个路由
 ```go
 	r.GET("/no_middleware", func(c *gin.Context) {
 		c.String(http.StatusOK, "No Use Middleware")
