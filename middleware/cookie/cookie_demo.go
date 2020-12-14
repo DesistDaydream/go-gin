@@ -20,7 +20,7 @@ func main() {
 			// 设置一个 cookie 的属性。这个 cookie 会包含在 Response 里响应给客户端
 			// 客户端一般会保存该 cookie，并在下次访问时带上该 cookie。
 			// 需要设置的参数依次为 name、value、MaxAge、path、domain、secure、httpOnly
-			c.SetCookie("key_cookie", "value_cookie", 30, "/", "*", false, true)
+			c.SetCookie("key_cookie", "value_cookie", 30, "/", "datalake.cn", false, true)
 		}
 		fmt.Printf("cookie 的值为：%v\n", cookie)
 	})

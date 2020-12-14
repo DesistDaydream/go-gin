@@ -20,17 +20,17 @@ func MiddleWare(c *gin.Context) {
 	time.Sleep(2 * time.Second)
 	fmt.Println("中间件消耗时间：", time.Since(t))
 
-	// c.Next() 是中间件处理中很重要的一环。该方法将会挂起中间件的执行程序，等待 Handler 完成之后，再执行 c.Next() 下面的代码。
+	// c.Next() 是中间件处理中很重要的一环。该方法将会挂起中间件的执行程序并继续执行调用该中间件的 Handler，等待 Handler 完成之后，再执行 c.Next() 下面的代码。
 	// 如果不写 c.Next() 那么会是这种输出结果：
 	// 中间件开始执行
-	// Handler 共消耗时间： 2.00028165s
+	// 中间件消耗时间： 2.00028165s
 	// 中间件+Handler 共消耗时间： 2.000404446s
-	// 获取了中间件中写入到 gin.Context 中的值： 这是一个中间件样例 XD
+	// Handler 获取了中间件中写入到 gin.Context 中的值： 这是一个中间件样例 XD
 	//
 	// 如果写了 c.Next() ，那么会是这种输出结果：
 	// 中间件开始执行
-	// Handler 共消耗时间： 2.000796193s
-	// 获取了中间件中写入到 gin.Context 中的值： 这是一个中间件样例 XD
+	// 中间件消耗时间： 2.000796193s
+	// Handler 获取了中间件中写入到 gin.Context 中的值： 这是一个中间件样例 XD
 	// 中间件+Handler 共消耗时间： 5.001351866s
 	//
 	// 所以如果将 c.Set() 写到 c.Next() 后面，此时已经挂起，正常的页面处理逻辑中就无法获取 c.Set() 设置的值。
@@ -44,6 +44,7 @@ func MiddleWare(c *gin.Context) {
 
 // PartialMiddleWare 局部中间件逻辑
 // 这个中间件声明了一个返回值，与上面的 MiddleWare() 只是写法不同，效果都是一样的，这里就是展现一下两种不同的声明和调用方法
+// 带 return 的方式更适合在其中需要返回时不再进行后续处理时使用
 func PartialMiddleWare() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		fmt.Println("局部中间件开始执行")
@@ -67,7 +68,7 @@ func main() {
 		r.GET("/middleware", func(c *gin.Context) {
 			// 从中间中使用的 c.Set() 方法获取其值，并将中间件中定义的值打印到服务端，并响应给客户端。
 			req, _ := c.Get("request")
-			fmt.Println("获取了中间件中写入到 gin.Context 中的值：", req)
+			fmt.Println("Handler 获取了中间件中写入到 gin.Context 中的值：", req)
 			c.String(200, "%v", req)
 			// 让 Handler 运行3秒，模拟一下处理时间以便观察中间件的处理逻辑
 			time.Sleep(3 * time.Second)
