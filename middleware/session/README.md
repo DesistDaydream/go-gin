@@ -1,5 +1,9 @@
 
 # 自己实现一个 Session 的功能
+
+
+
+
 ## 先写接口
 [Session](./practice/session.go) # Session 接口
 ```go
@@ -11,7 +15,7 @@ type Session interface {
 }
 ```
 
-[Manager](./practice/manager.go) # Session Manager(Session管理器) 接口
+[Session Manager](./practice/session_mgr.go) # Session管理器 接口
 ```go
 type Manager interface {
 	Init(addr string, options ...string) (err error)
@@ -21,3 +25,6 @@ type Manager interface {
 ```
 
 ## 写接口的实现
+[Memory Session](./practice/memory_session.go) # 通过内存存储 Session
+
+[Memory Session Manager](./practice/memory_session_mgr.go) # Memory Session 的管理器
