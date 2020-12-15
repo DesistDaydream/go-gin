@@ -1,3 +1,5 @@
+# 目录结构
+practice 是各种中间件练习的入口
 # Gin 框架实现 Middleware(中间件)
 ![](https://raw.githubusercontent.com/DesistDaydream/PictureHosting/main/GoWeb/middleware.png)
 
