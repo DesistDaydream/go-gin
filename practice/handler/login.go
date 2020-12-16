@@ -28,6 +28,12 @@ func LoginHandler(c *gin.Context) {
 			fmt.Println("密码为：", u.Password)
 			// 判断用户名和密码是否正确
 			if u.Username == "zn" && u.Password == "zn" {
+				// 待开发内容：
+				// 登录成功，在当前这个用户得 SessionData 保存一个键值对 isLogin=true
+				// 先从上下文中获取 SessionData
+				// 给 SessionData 设置 isLogin=true
+				//
+				// 跳转到订单页面
 				c.Redirect(http.StatusFound, "/order")
 			} else {
 				c.HTML(http.StatusOK, "login.html", gin.H{"err": "用户名或密码错误"})

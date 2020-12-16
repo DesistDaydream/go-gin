@@ -9,8 +9,10 @@ import (
 )
 
 const (
-	sessionCookieName  = "session_id" // SessionID 在 Cookie 中对应的 key
-	sessionContextName = "session"    // SessionData 在 gin 上下文中对应的 key
+	// SessionCookieName 是 SessionID 在 Cookie 中对应的 key
+	SessionCookieName = "session_id"
+	// SessionContextName 是 SessionData 在 gin 上下文中对应的 key
+	SessionContextName = "session"
 )
 
 // Mgr 全局变量
@@ -38,7 +40,7 @@ type Manager struct {
 	rwLock  sync.RWMutex
 }
 
-// InitManager 实例化 Manager
+// InitManager 初始化 Manager
 func InitManager() {
 	Mgr = &Manager{
 		Session: make(map[string]*Data, 1024),
@@ -82,7 +84,7 @@ func Middleware(m *Manager) gin.HandlerFunc {
 		fmt.Println("中间件开始认证")
 		var d *Data
 		// 从请求的 Cookie 中获取 SessionID
-		sessionID, err := c.Cookie(sessionCookieName)
+		sessionID, err := c.Cookie(SessionCookieName)
 		if err != nil {
 			// 无 SessionID 的话，给这个用户创建一个新的 SessionData，同时分配一个 SessionID
 			d = m.CreateSession()
@@ -100,10 +102,10 @@ func Middleware(m *Manager) gin.HandlerFunc {
 		// 如何实现让后续所有的处理请求的方法都唔那个拿到 SessionData
 
 		// 利用 gin 的 c.Set，然后中间件中 c.Next
-		c.Set(sessionContextName, d)
+		c.Set(SessionContextName, d)
 
 		// 在 gin 框架中，要回写 Cookie 必须在处理请求的函数返回之前
-		c.SetCookie(sessionCookieName, sessionID, 3600, "/", "datalake.cn", false, true)
+		c.SetCookie(SessionCookieName, sessionID, 20, "/", "datalake.cn", false, true)
 		c.Next()
 	}
 }

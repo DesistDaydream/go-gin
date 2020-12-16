@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/DesistDaydream/GoGin/middleware/session"
-	"github.com/DesistDaydream/GoGin/practice/handler"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,10 +18,11 @@ func main() {
 	session.InitManager()
 	r.Use(session.Middleware(session.Mgr))
 
-	r.GET("/index", handler.IndexGet)
-	r.Any("/login", handler.LoginHandler)
-	// r.GET("/home", homeHandler)
-	// r.GET("/vip", vipHandler)
+	// 设置路由
+	r.GET("/index", indexHandler)
+	r.Any("/login", loginHandler)
+	r.GET("/order", AuthMiddleware, orderHandler)
+	r.GET("/vip", AuthMiddleware, vipHandler)
 	r.NoRoute(func(c *gin.Context) {
 		c.HTML(http.StatusNotFound, "404.html", nil)
 	})

@@ -9,15 +9,14 @@ import (
 // InitRouter 初始化路由，设定路由信息
 func InitRouter(r *gin.Engine) {
 
-	r.GET("/", handler.IndexHandler)
+	r.Any("/", handler.IndexHandler)
 	r.Any("/login", handler.LoginHandler)
 
 	// 为本程序注册中间件，以便后续页面都只有在认证之后才可以访问
 	r.Use(middleware.AuthMiddleWare)
 	// 使用 {} 是为了代码规范，不写也可以
 	{
-		r.GET("/order", handler.OrderGet)
-		r.POST("/order", handler.OrderPost)
+		r.Any("/order", handler.OrderHandler)
 		r.GET("/stock-in", handler.StockInGet)
 		r.POST("/stock-in", handler.StockInPost)
 		r.GET("/stock-out", handler.StockOutGet)
