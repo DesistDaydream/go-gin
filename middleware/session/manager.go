@@ -40,10 +40,21 @@ type Manager struct {
 	rwLock  sync.RWMutex
 }
 
+// Manager Session 的管理器接口
+type Manager interface {
+	GetSessionData(string)
+}
+
 // InitManager 初始化 Manager
-func InitManager() {
-	Mgr = &Manager{
-		Session: make(map[string]*Data, 1024),
+// 根据 name 参数，选择使用什么类型的后端来存储 SessionData
+func InitManager(name string, addr string, options ...string) {
+	switch name {
+	case "memory":
+		Mgr = &Manager{
+			Session: make(map[string]*Data, 1024),
+		}
+	case "redis":
+
 	}
 }
 

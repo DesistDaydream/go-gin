@@ -15,7 +15,7 @@ func main() {
 	r.LoadHTMLGlob("templates/*")
 
 	// 使用中间件
-	session.InitManager()
+	session.InitManager("memory", "127.0.0.1")
 	r.Use(session.Middleware(session.Mgr))
 
 	// 设置路由
