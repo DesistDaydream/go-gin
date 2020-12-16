@@ -81,7 +81,7 @@ func Middleware(m *Manager) gin.HandlerFunc {
 		panic("must call InitManager() before use it!")
 	}
 	return func(c *gin.Context) {
-		fmt.Println("中间件开始处理 Session")
+		fmt.Println("Session 处理中间件开始处理 Session")
 		var d *Data
 		// 从请求的 Cookie 中获取 SessionID
 		sessionID, err := c.Cookie(SessionCookieName)
@@ -104,10 +104,11 @@ func Middleware(m *Manager) gin.HandlerFunc {
 			fmt.Println("SessionID 未过期", sessionID)
 		}
 
-		// 如何实现让后续所有的处理请求的方法都唔那个拿到 SessionData
+		// 如何实现让后续所有的处理请求的方法都能拿到 SessionData？
 
 		// 利用 gin 的 c.Set，然后中间件中 c.Next
 		c.Set(SessionContextName, d)
+		// 用户的每次访问，都要重新设置以下 Cookie，主要是更新过期时间
 		// 在 gin 框架中，要回写 Cookie 必须在处理请求的函数返回之前
 		c.SetCookie(SessionCookieName, sessionID, 60, "/", "datalake.cn", false, true)
 		c.Next()
