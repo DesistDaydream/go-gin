@@ -7,17 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// LoginGet 登录界面 GET 请求处理
-func LoginGet(c *gin.Context) {
-	c.HTML(http.StatusOK, "login.gohtml", gin.H{
-		"title": "Hello Care Dailyer",
-	})
-}
+// LoginHandler 登录页面处理器
+func LoginHandler(c *gin.Context) {
+	switch c.Request.Method {
+	case "GET":
+		c.HTML(http.StatusOK, "login.html", gin.H{"title": "Hello Care Dailyer"})
+	case "POST":
+		fmt.Println("用户名为：", c.PostForm("username"))
+		fmt.Println("密码为：", c.PostForm("password"))
+		// c.DefaultQuery()
 
-// LoginPost 登录界面 POST 请求处理
-func LoginPost(c *gin.Context) {
-	fmt.Println("用户名为：", c.PostForm("username"))
-	fmt.Println("密码为：", c.PostForm("password"))
-
-	c.Redirect(http.StatusMovedPermanently, "/order")
+		c.Redirect(http.StatusMovedPermanently, "/order")
+	default:
+		c.String(http.StatusNotFound, "本页面暂仅支持 GET 和 POST 请求\n")
+	}
 }

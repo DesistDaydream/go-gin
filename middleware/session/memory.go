@@ -11,12 +11,12 @@ import (
 // }
 
 // Get session.Data 支持的操作,根据给定的 key 获取值
-func (s *Data) Get(keys string) (values interface{}, err error) {
+func (data *Data) Get(keys string) (values interface{}, err error) {
 	// 获取读锁
-	s.rwLock.RLock()
-	defer s.rwLock.RUnlock()
+	data.rwLock.RLock()
+	defer data.rwLock.RUnlock()
 
-	value, ok := s.Data["key"]
+	value, ok := data.Data["key"]
 	if !ok {
 		err = fmt.Errorf("invalid key")
 		return
@@ -26,18 +26,18 @@ func (s *Data) Get(keys string) (values interface{}, err error) {
 }
 
 // Set session.Data 支持的操作,根据给定的 k/v 设定这些值
-func (s *Data) Set(keys string, value interface{}) {
+func (data *Data) Set(keys string, value interface{}) {
 	// 获取读锁
-	s.rwLock.Lock()
-	defer s.rwLock.Unlock()
-	s.Data["key"] = value
+	data.rwLock.Lock()
+	defer data.rwLock.Unlock()
+	data.Data["key"] = value
 }
 
 // Del session.Data 支持的操作,根据给定的 key，删除对应的 k/v 对
-func (s *Data) Del(keys string, value interface{}) (err error) {
+func (data *Data) Del(keys string, value interface{}) (err error) {
 	// 获取读锁
-	s.rwLock.Lock()
-	defer s.rwLock.Unlock()
-	delete(s.Data, "key")
+	data.rwLock.Lock()
+	defer data.rwLock.Unlock()
+	delete(data.Data, "key")
 	return
 }

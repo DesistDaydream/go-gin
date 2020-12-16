@@ -14,7 +14,7 @@ import (
 
 // StockInGet 入库页面 GET 请求处理
 func StockInGet(c *gin.Context) {
-	c.HTML(http.StatusOK, "stock-in.gohtml", nil)
+	c.HTML(http.StatusOK, "stock-in.html", nil)
 }
 
 // StockInPost 入库页面 POST 请求处理
@@ -34,7 +34,7 @@ func StockInPost(c *gin.Context) {
 			// 由于上面绑定了结构体与表单，所以表单中填写的数据将会传到结构体中。调用 AddStockInOrder() 时，也就能正常使用结构体中的数据了。
 			i.AddStockInOrder(c)
 
-			c.HTML(http.StatusOK, "stock-in.gohtml", gin.H{
+			c.HTML(http.StatusOK, "stock-in.html", gin.H{
 				"result": "入库请求已受理！恭喜进货！",
 			})
 		}

@@ -79,13 +79,13 @@ func Middleware(m *Manager) gin.HandlerFunc {
 		panic("must call InitManager() before use it!")
 	}
 	return func(c *gin.Context) {
+		fmt.Println("中间件开始认证")
 		var d *Data
 		// 从请求的 Cookie 中获取 SessionID
 		sessionID, err := c.Cookie(sessionCookieName)
 		if err != nil {
 			// 无 SessionID 的话，给这个用户创建一个新的 SessionData，同时分配一个 SessionID
 			d = m.CreateSession()
-
 		}
 
 		// 有 SessionID 的话，根据 SessionID 去 Session 的大仓库中获取对应的 SessionData

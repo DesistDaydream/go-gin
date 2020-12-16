@@ -10,8 +10,7 @@ import (
 func InitRouter(r *gin.Engine) {
 
 	r.GET("/", handler.IndexGet)
-	r.GET("/login", handler.LoginGet)
-	r.POST("/login", handler.LoginPost)
+	r.Any("/login", handler.LoginHandler)
 
 	// 为本程序注册中间件，以便后续页面都只有在认证之后才可以访问
 	r.Use(middleware.AuthMiddleWare)

@@ -20,5 +20,5 @@ func CommodityGet(c *gin.Context) {
 	// 	"sizes":    database.Sizes,
 	// 	"amounts":  database.Amounts,
 	// }
-	// c.HTML(http.StatusOK, "inventory.gohtml", h)
+	// c.HTML(http.StatusOK, "inventory.html", h)
 }

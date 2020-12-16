@@ -35,7 +35,7 @@ func QueryGet(c *gin.Context) {
 		"sizes":    Sizes,
 		"amounts":  Amounts,
 	}
-	c.HTML(http.StatusOK, "query.gohtml", h)
+	c.HTML(http.StatusOK, "query.html", h)
 }
 
 // QueryPost 查询页面 POST 请求处理

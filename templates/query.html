@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>库存信息查询</title>
+</head>
+
+<body>  
+  <form action="/query" method="post">
+    <select name="product">
+      <option value="果C精品">果C精品</option>
+      <option value="新款丝薄">新款丝薄</option>
+      <option value="IP小飞侠">IP小飞侠</option>
+      <option value="丝柔">丝柔</option>
+    </select>
+
+    <select name="size">
+      <option value="*">ALL</option>
+      <option value="NB">NB</option>
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="XXL">XXL</option>
+      <option value="XXXL">XXXL</option>
+    </select>
+
+    <input type="radio" name="type" value="1">纸尿裤
+    <input type="radio" name="type" value="2">拉拉裤
+    <br>
+
+    <input type="submit" name="button" value="查询">
+    <input type="submit" name="button" value="返回">
+  </form>
+
+  <div style="width:500px;text-align:center">
+    <div style="background-color:#00FFFF;width:230px">
+      <h1 style="margin-bottom:0;">出入库信息记录</h1>
+    </div>
+
+    <table border="1" class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>供应商</th>
+          <th>类型</th>
+          <th>尺寸</th>
+          <th>订单数量</th>
+          <th>入库时间</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ range $i,$v := .provider }}{{$v}}<br>{{end}}</td>
+          <td>{{ range $i,$v := .products }}{{$v}}<br>{{end}}</td>
+          <td>{{ range $i,$v := .sizes }}{{$v}}<br>{{end}}</td>
+          <td>{{ range $i,$v := .amounts }}{{$v}}<br>{{end}}</td>
+          <td>{{ range $i,$v := .createTimes }}{{$v}}<br>{{end}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+
+</html>
