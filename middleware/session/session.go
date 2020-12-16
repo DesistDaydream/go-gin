@@ -2,10 +2,9 @@ package session
 
 import (
 	"fmt"
-	"sync"
 
+	"github.com/DesistDaydream/GoGin/middleware/session/storage"
 	"github.com/gin-gonic/gin"
-	uuid "github.com/satori/go.uuid"
 )
 
 const (
@@ -15,34 +14,24 @@ const (
 	SessionContextName = "session"
 )
 
-// Mgr 全局变量
-var Mgr *Manager
+// ManagerObject 全局变量
+var ManagerObject Manager
 
-// Data 表示一个用户的 SessionData 应该具有的属性
-type Data struct {
-	ID   string
-	Data map[string]interface{}
-	// 读写锁，锁的是上面的 Data
-	rwLock sync.RWMutex
+// Data is
+type Data interface {
+	GetID() string // 返回自己的SessionID
+	Get(keys string) (values interface{}, err error)
+	Set(keys string, value interface{})
+	Del(keys string)
+	Save()
 }
 
-// NewData 实例化 Data
-func NewData(id string) *Data {
-	return &Data{
-		ID:   id,
-		Data: make(map[string]interface{}, 8),
-	}
-}
-
-// Manager 是一个全局的 Session 管理
-type Manager struct {
-	Session map[string]*Data
-	rwLock  sync.RWMutex
-}
-
-// Manager Session 的管理器接口
+// Manager 所有存储 SessionData 的后端类型都应该遵循的接口
 type Manager interface {
-	GetSessionData(string)
+	// 所有支持的后端都必须实现 Init()
+	Init(addr string, options ...string)
+	GetSessionData(string) (d Data, err error)
+	CreateSession() (d Data)
 }
 
 // InitManager 初始化 Manager
@@ -50,57 +39,30 @@ type Manager interface {
 func InitManager(name string, addr string, options ...string) {
 	switch name {
 	case "memory":
-		Mgr = &Manager{
-			Session: make(map[string]*Data, 1024),
-		}
+		ManagerObject = storage.NewMemoryManager()
 	case "redis":
-
+		ManagerObject = storage.NewRedisManager()
 	}
+	// 初始化 ManagerObject
+	ManagerObject.Init(addr, options...)
 }
 
-// GetSessionData 根据 SessionID 找到对应的 Data
-func (m *Manager) GetSessionData(sessionID string) (d *Data, err error) {
-	// 取之前加锁
-	m.rwLock.RLock()
-	defer m.rwLock.RUnlock()
-
-	//
-	d, ok := m.Session[sessionID]
-	if !ok {
-		err = fmt.Errorf("invalid session id")
-		return
-	}
-	return
-}
-
-// CreateSession 创建一条 Session 记录
-func (m *Manager) CreateSession() (d *Data) {
-	// 造一个 SessionID
-	uuidObj := uuid.NewV4()
-	// 造一个和 sessionID 对应的 SessionData
-	d = NewData(uuidObj.String())
-	// 将创建的 SessionID 保存到 SessionData 中
-	m.Session[d.ID] = d
-	// 返回 SessionData
-	return
-}
-
-// Middleware 实现一个 gin 框架的中间件，这里是一个中间件处理的逻辑
+// SessionMiddleware 实现一个 gin 框架的中间件，这里是一个中间件处理的逻辑
 // 所有流经此中间件的请求，它的上下文中肯定会有一个 session
-func Middleware(m *Manager) gin.HandlerFunc {
+func SessionMiddleware(m Manager) gin.HandlerFunc {
 	if m == nil {
 		panic("must call InitManager() before use it!")
 	}
 	return func(c *gin.Context) {
 		fmt.Println("Session 处理中间件开始处理 Session")
-		var d *Data
+		var d Data
 		// 从请求的 Cookie 中获取 SessionID
 		sessionID, err := c.Cookie(SessionCookieName)
 		// 判断是否有 SessionID，根据有无进行不同的处理
 		if err != nil {
 			// 无 SessionID 的话，给这个用户创建一个新的 SessionData，同时分配一个 SessionID
 			d = m.CreateSession()
-			sessionID = d.ID
+			sessionID = d.GetID()
 			fmt.Println("无 SessionID，创建一个 SessionData，并分配一个 SessionID", sessionID)
 		} else {
 			// 有 SessionID 的话，根据 SessionID 去 Session 的大仓库中获取对应的 SessionData
@@ -109,7 +71,7 @@ func Middleware(m *Manager) gin.HandlerFunc {
 				// 根据用户传过来的 SessionID 在大仓库中取不到 SessionData。(比如 SessionID 过期或错误)
 				d = m.CreateSession()
 				// 更新用户 Cookie 中保存的那个 SessionID
-				sessionID = d.ID
+				sessionID = d.GetID()
 				fmt.Println("SessionID过期，分配一个新 ID", sessionID)
 			}
 			fmt.Println("SessionID 未过期", sessionID)

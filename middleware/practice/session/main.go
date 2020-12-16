@@ -15,8 +15,8 @@ func main() {
 	r.LoadHTMLGlob("templates/*")
 
 	// 使用中间件
-	session.InitManager("memory", "127.0.0.1")
-	r.Use(session.Middleware(session.Mgr))
+	session.InitManager("redis", "127.0.0.1：6379")
+	r.Use(session.SessionMiddleware(session.ManagerObject))
 
 	// 设置路由
 	r.GET("/index", indexHandler)
