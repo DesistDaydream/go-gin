@@ -7,8 +7,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// IndexGet 首页界面处理
-func IndexGet(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.html", nil)
-	fmt.Println("访问根目录后，服务端输出的信息。")
+// IndexHandler 首页界面处理
+func IndexHandler(c *gin.Context) {
+	switch c.Request.Method {
+	case "POST":
+		c.Redirect(http.StatusFound, "login.html")
+	default:
+		c.HTML(http.StatusOK, "index.html", nil)
+		fmt.Println("访问根目录后，服务端输出的信息。")
+	}
 }

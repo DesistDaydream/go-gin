@@ -15,10 +15,10 @@ func OrderGet(c *gin.Context) {
 func OrderPost(c *gin.Context) {
 	switch c.PostForm("button") {
 	case "入库":
-		c.Redirect(http.StatusMovedPermanently, "/stock-in")
+		c.Redirect(http.StatusFound, "/stock-in")
 	case "出库":
-		c.Redirect(http.StatusMovedPermanently, "/stock-out")
+		c.Redirect(http.StatusFound, "/stock-out")
 	case "查询":
-		c.Redirect(http.StatusMovedPermanently, "/query")
+		c.Redirect(http.StatusFound, "/query")
 	}
 }

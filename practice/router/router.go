@@ -9,7 +9,7 @@ import (
 // InitRouter 初始化路由，设定路由信息
 func InitRouter(r *gin.Engine) {
 
-	r.GET("/", handler.IndexGet)
+	r.GET("/", handler.IndexHandler)
 	r.Any("/login", handler.LoginHandler)
 
 	// 为本程序注册中间件，以便后续页面都只有在认证之后才可以访问

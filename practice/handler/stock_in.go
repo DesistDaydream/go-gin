@@ -38,6 +38,6 @@ func StockInPost(c *gin.Context) {
 
 	// 返回order页面
 	case "返回":
-		c.Redirect(http.StatusMovedPermanently, "/order")
+		c.Redirect(http.StatusFound, "/order")
 	}
 }

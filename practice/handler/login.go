@@ -10,8 +10,6 @@ import (
 // LoginHandler 登录页面处理器
 func LoginHandler(c *gin.Context) {
 	switch c.Request.Method {
-	case "GET":
-		c.HTML(http.StatusOK, "login.html", gin.H{"title": "Hello Care Dailyer"})
 	case "POST":
 		// 用来绑定用户登录时填写的用户名和密码
 		var u struct {
@@ -30,7 +28,7 @@ func LoginHandler(c *gin.Context) {
 			fmt.Println("密码为：", u.Password)
 			// 判断用户名和密码是否正确
 			if u.Username == "zn" && u.Password == "zn" {
-				c.Redirect(http.StatusMovedPermanently, "/order")
+				c.Redirect(http.StatusFound, "/order")
 			} else {
 				c.HTML(http.StatusOK, "login.html", gin.H{"err": "用户名或密码错误"})
 			}
@@ -38,6 +36,6 @@ func LoginHandler(c *gin.Context) {
 			// 跳转到注册页面
 		}
 	default:
-		c.String(http.StatusNotFound, "本页面暂仅支持 GET 和 POST 请求\n")
+		c.HTML(http.StatusOK, "login.html", gin.H{"title": "Hello Care Dailyer"})
 	}
 }

@@ -42,9 +42,9 @@ func QueryGet(c *gin.Context) {
 func QueryPost(c *gin.Context) {
 	switch c.PostForm("button") {
 	case "查询":
-		c.Redirect(http.StatusMovedPermanently, "/inventory")
+		c.Redirect(http.StatusFound, "/inventory")
 	case "返回":
-		c.Redirect(http.StatusMovedPermanently, "/order")
+		c.Redirect(http.StatusFound, "/order")
 	}
 	fmt.Println("显示当前库存数：")
 }
