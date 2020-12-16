@@ -34,7 +34,6 @@ func (i *StockInOrder) AddStockInOrder(c *gin.Context) {
 
 	// 数据库处理逻辑，结构体中的数据在调用本方法之前已经处理好了。
 	db.Create(i)
-
 }
 
 // QueryStockInOrder 在 query.go 页面中查询数据库中的入库订单数据
@@ -48,6 +47,6 @@ func QueryStockInOrder() (StockInOrders []StockInOrder) {
 }
 
 // AddStockOutOrder 在 stock-in.go 页面添加出库订单数据
-func (i *StockOutOrder) AddStockOutOrder(c *gin.Context) {
+func (o *StockOutOrder) AddStockOutOrder(c *gin.Context) {
 	fmt.Println("待更新")
 }
