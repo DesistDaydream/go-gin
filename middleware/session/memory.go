@@ -1,10 +1,8 @@
-package sessionstorage
+package session
 
 import (
 	"fmt"
 	"sync"
-
-	"github.com/DesistDaydream/GoGin/middleware/session"
 
 	uuid "github.com/satori/go.uuid"
 )
@@ -18,7 +16,7 @@ type MemorySessionData struct {
 }
 
 // NewMemorySessionData 实例化 RedisSessionData
-func NewMemorySessionData(id string) session.Data {
+func NewMemorySessionData(id string) Data {
 	return &MemorySessionData{
 		ID:   id,
 		Data: make(map[string]interface{}, 8),
@@ -30,7 +28,7 @@ func (m *MemorySessionData) GetID() string {
 	return m.ID
 }
 
-// Get session.Data 支持的操作,根据给定的 key 获取值
+// Get Data 支持的操作,根据给定的 key 获取值
 func (m *MemorySessionData) Get(keys string) (values interface{}, err error) {
 	// 获取读锁
 	m.rwLock.RLock()
@@ -45,7 +43,7 @@ func (m *MemorySessionData) Get(keys string) (values interface{}, err error) {
 	return value, nil
 }
 
-// Set session.Data 支持的操作,根据给定的 k/v 设定这些值
+// Set Data 支持的操作,根据给定的 k/v 设定这些值
 func (m *MemorySessionData) Set(keys string, value interface{}) {
 	// 获取读锁
 	m.rwLock.Lock()
@@ -53,7 +51,7 @@ func (m *MemorySessionData) Set(keys string, value interface{}) {
 	m.Data["key"] = value
 }
 
-// Del session.Data 支持的操作,根据给定的 key，删除对应的 k/v 对
+// Del Data 支持的操作,根据给定的 key，删除对应的 k/v 对
 func (m *MemorySessionData) Del(keys string) {
 	// 获取读锁
 	m.rwLock.Lock()
@@ -68,14 +66,14 @@ func (m *MemorySessionData) Save() {
 
 // MemoryManager 是一个全局的 Session 管理
 type MemoryManager struct {
-	Session map[string]session.Data
+	Session map[string]Data
 	rwLock  sync.RWMutex
 }
 
 // NewMemoryManager 实例化存储 SessionData 的 RAM 后端
-func NewMemoryManager() session.Manager {
+func NewMemoryManager() Manager {
 	return &MemoryManager{
-		Session: make(map[string]session.Data, 1024),
+		Session: make(map[string]Data, 1024),
 	}
 }
 
@@ -85,7 +83,7 @@ func (m *MemoryManager) Init(addr string, options ...string) {
 }
 
 // GetSessionData 根据 SessionID 找到对应的 Data
-func (m *MemoryManager) GetSessionData(sessionID string) (d session.Data, err error) {
+func (m *MemoryManager) GetSessionData(sessionID string) (d Data, err error) {
 	// 取之前加锁
 	m.rwLock.RLock()
 	defer m.rwLock.RUnlock()
@@ -100,7 +98,7 @@ func (m *MemoryManager) GetSessionData(sessionID string) (d session.Data, err er
 }
 
 // CreateSession 创建一条 Session 记录
-func (m *MemoryManager) CreateSession() (d session.Data) {
+func (m *MemoryManager) CreateSession() (d Data) {
 	// 造一个 SessionID
 	uuidObj := uuid.NewV4()
 	// 造一个和 sessionID 对应的 SessionData

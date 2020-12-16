@@ -15,7 +15,7 @@ func main() {
 	r.LoadHTMLGlob("templates/*")
 
 	// 使用中间件
-	session.InitManager("redis", "127.0.0.1：6379")
+	session.InitManager("redis", "127.0.0.1:6379", "redis", "0")
 	r.Use(session.Middleware(session.ManagerObject))
 
 	// 设置路由

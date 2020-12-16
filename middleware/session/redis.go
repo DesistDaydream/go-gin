@@ -1,4 +1,4 @@
-package sessionstorage
+package session
 
 import (
 	"encoding/json"
@@ -7,7 +7,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/DesistDaydream/GoGin/middleware/session"
 	"github.com/go-redis/redis"
 	uuid "github.com/satori/go.uuid"
 )
@@ -25,7 +24,7 @@ type RedisSessionData struct {
 }
 
 // NewRedisSessionData 实例化 RedisSessionData
-func NewRedisSessionData(id string) session.Data {
+func NewRedisSessionData(id string) Data {
 	return &RedisSessionData{
 		ID:   id,
 		Data: make(map[string]interface{}, 8),
@@ -37,7 +36,7 @@ func (r *RedisSessionData) GetID() string {
 	return r.ID
 }
 
-// Get session.Data 支持的操作,根据给定的 key 获取值
+// Get Data 支持的操作,根据给定的 key 获取值
 func (r *RedisSessionData) Get(keys string) (values interface{}, err error) {
 	// 获取读锁
 	r.rwLock.RLock()
@@ -52,7 +51,7 @@ func (r *RedisSessionData) Get(keys string) (values interface{}, err error) {
 	return value, nil
 }
 
-// Set session.Data 支持的操作,根据给定的 k/v 设定这些值
+// Set Data 支持的操作,根据给定的 k/v 设定这些值
 func (r *RedisSessionData) Set(keys string, value interface{}) {
 	// 获取读锁
 	r.rwLock.Lock()
@@ -60,7 +59,7 @@ func (r *RedisSessionData) Set(keys string, value interface{}) {
 	r.Data["key"] = value
 }
 
-// Del session.Data 支持的操作,根据给定的 key，删除对应的 k/v 对
+// Del Data 支持的操作,根据给定的 key，删除对应的 k/v 对
 func (r *RedisSessionData) Del(keys string) {
 	// 获取读锁
 	r.rwLock.Lock()
@@ -86,16 +85,16 @@ func (r *RedisSessionData) Save() {
 
 // RedisManager 存储 SessionData 的 Redis 后端管理器
 type RedisManager struct {
-	Session map[string]session.Data
+	Session map[string]Data
 	rwLock  sync.RWMutex
 	// Redis 连接池
 	client *redis.Client
 }
 
 // NewRedisManager 实例化存储 SessionData 的 Redis 后端
-func NewRedisManager() session.Manager {
+func NewRedisManager() Manager {
 	return &RedisManager{
-		Session: make(map[string]session.Data, 1024),
+		Session: make(map[string]Data, 1024),
 	}
 }
 
@@ -145,11 +144,10 @@ func (r *RedisManager) Init(addr string, options ...string) {
 
 	_, err = r.client.Ping().Result()
 	panic(err)
-
 }
 
 // GetSessionData 获取 SessionID 对应的 SessionData
-func (r *RedisManager) GetSessionData(sessionID string) (d session.Data, err error) {
+func (r *RedisManager) GetSessionData(sessionID string) (d Data, err error) {
 	// 如果 SessionData 为空，去 Redis 里根据 SessionID 加载 SessionData
 	if r.Session == nil {
 		if err = r.loadFromRedis(sessionID); err != nil {
@@ -167,8 +165,8 @@ func (r *RedisManager) GetSessionData(sessionID string) (d session.Data, err err
 	return
 }
 
-// CreateSession is
-func (r *RedisManager) CreateSession() (d session.Data) {
+// CreateSession 创建一条 Session 记录
+func (r *RedisManager) CreateSession() (d Data) {
 	uuidObj := uuid.NewV4()
 	d = NewRedisSessionData(uuidObj.String())
 	r.Session[d.GetID()] = d
