@@ -66,10 +66,10 @@ func (m *Manager) GetSessionData(sessionID string) (d *Data, err error) {
 func (m *Manager) CreateSession() (d *Data) {
 	// 造一个 SessionID
 	uuidObj := uuid.NewV4()
-
 	// 造一个和 sessionID 对应的 SessionData
 	d = NewData(uuidObj.String())
-
+	// 将创建的 SessionID 保存到 SessionData 中
+	m.Session[d.ID] = d
 	// 返回 SessionData
 	return
 }
@@ -81,31 +81,35 @@ func Middleware(m *Manager) gin.HandlerFunc {
 		panic("must call InitManager() before use it!")
 	}
 	return func(c *gin.Context) {
-		fmt.Println("中间件开始认证")
+		fmt.Println("中间件开始处理 Session")
 		var d *Data
 		// 从请求的 Cookie 中获取 SessionID
 		sessionID, err := c.Cookie(SessionCookieName)
+		// 判断是否有 SessionID，根据有无进行不同的处理
 		if err != nil {
 			// 无 SessionID 的话，给这个用户创建一个新的 SessionData，同时分配一个 SessionID
 			d = m.CreateSession()
-		}
-
-		// 有 SessionID 的话，根据 SessionID 去 Session 的大仓库中获取对应的 SessionData
-		d, err = m.GetSessionData(sessionID)
-		if err != nil {
-			// 根据用户传过来的 SessionID 在大仓库中取不到 SessionData
-			d = m.CreateSession()
-			// 更新用户 Cookie 中保存的那个 SessionID
 			sessionID = d.ID
+			fmt.Println("无 SessionID，创建一个 SessionData，并分配一个 SessionID", sessionID)
+		} else {
+			// 有 SessionID 的话，根据 SessionID 去 Session 的大仓库中获取对应的 SessionData
+			d, err = m.GetSessionData(sessionID)
+			if err != nil {
+				// 根据用户传过来的 SessionID 在大仓库中取不到 SessionData。(比如 SessionID 过期或错误)
+				d = m.CreateSession()
+				// 更新用户 Cookie 中保存的那个 SessionID
+				sessionID = d.ID
+				fmt.Println("SessionID过期，分配一个新 ID", sessionID)
+			}
+			fmt.Println("SessionID 未过期", sessionID)
 		}
 
 		// 如何实现让后续所有的处理请求的方法都唔那个拿到 SessionData
 
 		// 利用 gin 的 c.Set，然后中间件中 c.Next
 		c.Set(SessionContextName, d)
-
 		// 在 gin 框架中，要回写 Cookie 必须在处理请求的函数返回之前
-		c.SetCookie(SessionCookieName, sessionID, 20, "/", "datalake.cn", false, true)
+		c.SetCookie(SessionCookieName, sessionID, 60, "/", "datalake.cn", false, true)
 		c.Next()
 	}
 }

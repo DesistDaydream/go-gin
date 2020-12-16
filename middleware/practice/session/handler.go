@@ -10,6 +10,7 @@ import (
 
 // AuthMiddleware 校验用户是否已登录的中间件
 func AuthMiddleware(c *gin.Context) {
+	fmt.Println("中间件开始验证是否有 Session")
 	tmpD, _ := c.Get(session.SessionContextName)
 	// 拿到 SessionData
 	d := tmpD.(*session.Data)
