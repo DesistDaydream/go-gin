@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>欢迎使用库存管理系统</title>
-  </head>
-  <body>
-    {{/* <!-- 下面 {{ XXX }} 的内容可以从代码中传递进来(go模板) --> */}}
-    {{ .err }}
-    {{ .title }}
-    <form action="/login" method="post">
-      用户名:<input type="text" name="username">
-      密码:<input type="password" name="password">
 
-      <input type="submit" name="button" value="登录">
-      <input type="submit" name="button" value="注册">
-    </form>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <title>欢迎使用库存管理系统</title>
+</head>
+
+<body>
+  {{/* <!-- 下面 {{ XXX }} 的内容可以从代码中传递进来(go模板) --> */}}
+  {{ .err }}
+  {{ .title }}
+  <form action="/login" method="post">
+    用户名:<input type="text" name="username">
+    密码:<input type="password" name="password">
+
+    <input type="submit" name="button" value="登录">
+    <input type="submit" name="button" value="注册">
+  </form>
+</body>
+
 </html>

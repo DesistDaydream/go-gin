@@ -1,6 +1,8 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/DesistDaydream/GoGin/practice/handler"
 	"github.com/DesistDaydream/GoGin/practice/middleware"
 	"github.com/gin-gonic/gin"
@@ -25,4 +27,7 @@ func InitRouter(r *gin.Engine) {
 		r.POST("/query", handler.QueryPost)
 		r.GET("/inventory", handler.CommodityGet)
 	}
+	r.NoRoute(func(c *gin.Context) {
+		c.HTML(http.StatusNotFound, "404.html", nil)
+	})
 }

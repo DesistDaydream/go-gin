@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>出库</title>
+  <title>出库</title>
 </head>
+
 <body>
+  {{ .err }}
   {{ .result }}
   <form action="/stock-out" method="post">
     客户:<input type="text" name="客户" size="4">
@@ -39,6 +42,6 @@
     <input type="checkbox" name="interest" value="note2">备注2
     <input type="checkbox" name="interest" value="note3">备注3
   </form>
-
 </body>
+
 </html>
