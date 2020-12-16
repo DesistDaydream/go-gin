@@ -13,7 +13,7 @@ func AuthMiddleware(c *gin.Context) {
 	fmt.Println("验证中间件开始验证是否有 Session")
 	tmpD, _ := c.Get(session.SessionContextName)
 	// 拿到 SessionData
-	d := tmpD.(*session.Data)
+	d := tmpD.(session.Data)
 	value, err := d.Get("isLogin")
 	if err != nil {
 		c.Redirect(http.StatusFound, "/login")

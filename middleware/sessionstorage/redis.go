@@ -1,4 +1,4 @@
-package storage
+package sessionstorage
 
 import (
 	"encoding/json"
@@ -86,7 +86,7 @@ func (r *RedisSessionData) Save() {
 
 // RedisManager 存储 SessionData 的 Redis 后端管理器
 type RedisManager struct {
-	Session map[string]*session.Data
+	Session map[string]session.Data
 	rwLock  sync.RWMutex
 	// Redis 连接池
 	client *redis.Client
@@ -95,7 +95,7 @@ type RedisManager struct {
 // NewRedisManager 实例化存储 SessionData 的 Redis 后端
 func NewRedisManager() session.Manager {
 	return &RedisManager{
-		Session: make(map[string]*session.Data, 1024),
+		Session: make(map[string]session.Data, 1024),
 	}
 }
 
@@ -149,7 +149,7 @@ func (r *RedisManager) Init(addr string, options ...string) {
 }
 
 // GetSessionData 获取 SessionID 对应的 SessionData
-func (r *RedisManager) GetSessionData(sessionID string) (d *session.Data, err error) {
+func (r *RedisManager) GetSessionData(sessionID string) (d session.Data, err error) {
 	// 如果 SessionData 为空，去 Redis 里根据 SessionID 加载 SessionData
 	if r.Session == nil {
 		if err = r.loadFromRedis(sessionID); err != nil {
@@ -168,9 +168,9 @@ func (r *RedisManager) GetSessionData(sessionID string) (d *session.Data, err er
 }
 
 // CreateSession is
-func (r *RedisManager) CreateSession() (d *session.Data) {
+func (r *RedisManager) CreateSession() (d session.Data) {
 	uuidObj := uuid.NewV4()
-	d = session.NewData(uuidObj.String())
-	r.Session[d.ID] = d
+	d = NewRedisSessionData(uuidObj.String())
+	r.Session[d.GetID()] = d
 	return
 }

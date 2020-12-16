@@ -32,7 +32,7 @@ func loginHandler(c *gin.Context) {
 				panic("session 中间件错误")
 			}
 			// 拿到 SessionData
-			d := tmpD.(*session.Data)
+			d := tmpD.(session.Data)
 			d.Set("isLogin", true)
 			// 登录成功
 			c.Redirect(http.StatusFound, "/order")

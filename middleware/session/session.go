@@ -3,7 +3,7 @@ package session
 import (
 	"fmt"
 
-	"github.com/DesistDaydream/GoGin/middleware/session/storage"
+	"github.com/DesistDaydream/GoGin/middleware/sessionstorage"
 	"github.com/gin-gonic/gin"
 )
 
@@ -39,17 +39,17 @@ type Manager interface {
 func InitManager(name string, addr string, options ...string) {
 	switch name {
 	case "memory":
-		ManagerObject = storage.NewMemoryManager()
+		ManagerObject = sessionstorage.NewMemoryManager()
 	case "redis":
-		ManagerObject = storage.NewRedisManager()
+		ManagerObject = sessionstorage.NewRedisManager()
 	}
 	// 初始化 ManagerObject
 	ManagerObject.Init(addr, options...)
 }
 
-// SessionMiddleware 实现一个 gin 框架的中间件，这里是一个中间件处理的逻辑
+// Middleware 实现一个 gin 框架的中间件，这里是一个中间件处理的逻辑
 // 所有流经此中间件的请求，它的上下文中肯定会有一个 session
-func SessionMiddleware(m Manager) gin.HandlerFunc {
+func Middleware(m Manager) gin.HandlerFunc {
 	if m == nil {
 		panic("must call InitManager() before use it!")
 	}

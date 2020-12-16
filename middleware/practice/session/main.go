@@ -16,7 +16,7 @@ func main() {
 
 	// 使用中间件
 	session.InitManager("redis", "127.0.0.1：6379")
-	r.Use(session.SessionMiddleware(session.ManagerObject))
+	r.Use(session.Middleware(session.ManagerObject))
 
 	// 设置路由
 	r.GET("/index", indexHandler)
