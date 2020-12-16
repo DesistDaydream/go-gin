@@ -13,6 +13,7 @@ func LoginHandler(c *gin.Context) {
 	case "GET":
 		c.HTML(http.StatusOK, "login.html", gin.H{"title": "Hello Care Dailyer"})
 	case "POST":
+		//
 		fmt.Println("用户名为：", c.PostForm("username"))
 		fmt.Println("密码为：", c.PostForm("password"))
 		// c.DefaultQuery()

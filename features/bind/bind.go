@@ -2,6 +2,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,6 +33,9 @@ func main() {
 				c.JSON(401, gin.H{"status": "unauthorized"})
 			}
 		}
+		// 当然，如果不使用 binding 特性，也可以直接通过 gin 中，作用在 Context 结构体上的 PostForm() 方法来获取表单中的值
+		// 下面这个就是输出，名为 username 表单的值
+		fmt.Println(c.PostForm("username"))
 	})
 	router.Run(":8080")
 }

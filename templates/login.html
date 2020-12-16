@@ -5,7 +5,8 @@
     <title>欢迎使用库存管理系统</title>
   </head>
   <body>
-    <!-- 下面的 {{ .title }} 内容可以从代码中传递进来(go模板) -->
+    <!-- 下面 {{ XXX }} 的内容可以从代码中传递进来(go模板) -->
+    {{ }}
     {{ .title }}
     <form action="/login" method="post">
       用户名:<input type="text" name="username">
