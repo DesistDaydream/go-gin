@@ -37,12 +37,12 @@ func (r *RedisSessionData) GetID() string {
 }
 
 // Get Data 支持的操作,根据给定的 key 获取值
-func (r *RedisSessionData) Get(keys string) (values interface{}, err error) {
+func (r *RedisSessionData) Get(key string) (values interface{}, err error) {
 	// 获取读锁
 	r.rwLock.RLock()
 	defer r.rwLock.RUnlock()
 
-	value, ok := r.Data["key"]
+	value, ok := r.Data[key]
 	if !ok {
 		err = fmt.Errorf("invalid key")
 		return
@@ -52,19 +52,19 @@ func (r *RedisSessionData) Get(keys string) (values interface{}, err error) {
 }
 
 // Set Data 支持的操作,根据给定的 k/v 设定这些值
-func (r *RedisSessionData) Set(keys string, value interface{}) {
+func (r *RedisSessionData) Set(key string, value interface{}) {
 	// 获取读锁
 	r.rwLock.Lock()
 	defer r.rwLock.Unlock()
-	r.Data["key"] = value
+	r.Data[key] = value
 }
 
 // Del Data 支持的操作,根据给定的 key，删除对应的 k/v 对
-func (r *RedisSessionData) Del(keys string) {
+func (r *RedisSessionData) Del(key string) {
 	// 获取读锁
 	r.rwLock.Lock()
 	defer r.rwLock.Unlock()
-	delete(r.Data, "key")
+	delete(r.Data, key)
 }
 
 // Save 保存 SessionData

@@ -29,12 +29,12 @@ func (m *MemorySessionData) GetID() string {
 }
 
 // Get Data 支持的操作,根据给定的 key 获取值
-func (m *MemorySessionData) Get(keys string) (values interface{}, err error) {
+func (m *MemorySessionData) Get(key string) (values interface{}, err error) {
 	// 获取读锁
 	m.rwLock.RLock()
 	defer m.rwLock.RUnlock()
 
-	value, ok := m.Data["key"]
+	value, ok := m.Data[key]
 	if !ok {
 		err = fmt.Errorf("invalid key")
 		return
@@ -44,19 +44,19 @@ func (m *MemorySessionData) Get(keys string) (values interface{}, err error) {
 }
 
 // Set Data 支持的操作,根据给定的 k/v 设定这些值
-func (m *MemorySessionData) Set(keys string, value interface{}) {
+func (m *MemorySessionData) Set(key string, value interface{}) {
 	// 获取读锁
 	m.rwLock.Lock()
 	defer m.rwLock.Unlock()
-	m.Data["key"] = value
+	m.Data[key] = value
 }
 
 // Del Data 支持的操作,根据给定的 key，删除对应的 k/v 对
-func (m *MemorySessionData) Del(keys string) {
+func (m *MemorySessionData) Del(key string) {
 	// 获取读锁
 	m.rwLock.Lock()
 	defer m.rwLock.Unlock()
-	delete(m.Data, "key")
+	delete(m.Data, key)
 }
 
 // Save 保存 SessionData

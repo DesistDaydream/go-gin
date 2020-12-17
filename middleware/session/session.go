@@ -24,21 +24,21 @@ type Data interface {
 	// 返回自己的SessionID
 	GetID() string
 	// 根据 SessionData 中的 key 获取对应的 value
-	Get(keys string) (values interface{}, err error)
+	Get(key string) (values interface{}, err error)
 	// 设置 SessionData 中的 key/value对
-	Set(keys string, value interface{})
+	Set(key string, value interface{})
 	// 根据 SessionData 中的 key 删除对应的 key/value对
-	Del(keys string)
+	Del(key string)
 	// 将 SessionData 中的数据持久化
 	Save()
 }
 
-// Manager 本身是一个 struct，用来定义 Session管理器 应该具有的属性
+// Manager 本身是一个 struct，用来定义 SessionManager 应该具有的属性
 // 但是由于其要实现的存储 SessionData 的后端是一个动态切换的，可以是 RAM、Redis、Mysql 等等
 // 如果是结构体的话，其中的属性要适应所有类型的后端是不可能：
 // 比如 RAM 不需要一个 connection pool，但是 Redis 和 mysql 至少需要先创建一个 connection pool(就是打开一个连接)；而 Redis 和 Mysql 的 connection pool 又是不同的~
 // 所以不再约束这些后端应该具有的属性(也就是不再定义一个统一的的结构体),而是约束这些后端的行为(即定义一个统一的接口，这些后端都要实现这些方法，方法就是这些后端的行为)
-// 这些后端的行为，就如下面所使，应该包括这三个：初始化、获取 SessionData、创建 SessionData。
+// 这些后端的行为，就如下面所示，应该包括这三个：初始化、获取 SessionData、创建 SessionData。
 // 所有存储 SessionData 的后端类型都应该遵循的接口
 type Manager interface {
 	// 用来初始化 connection pool。内存不用初始化，在方法中直接 return 即可，不用执行任何行为
@@ -100,8 +100,8 @@ func Middleware(m Manager) gin.HandlerFunc {
 
 		// 利用 gin 的 c.Set，然后中间件中 c.Next
 		c.Set(SessionContextName, d)
-		// 用户的每次访问，都要重新设置以下 Cookie，主要是更新过期时间
-		// 在 gin 框架中，要回写 Cookie 必须在处理请求的函数返回之前
+		// 设置 Cookie。用户的每次请求都要重新设置以下 Cookie，主要是更新过期时间
+		// 注意：在 gin 框架中，要回写 Cookie 必须在处理请求的函数返回之前，也就是在 c.Next() 之前
 		c.SetCookie(SessionCookieName, sessionID, 60, "/", "datalake.cn", false, true)
 		c.Next()
 	}
