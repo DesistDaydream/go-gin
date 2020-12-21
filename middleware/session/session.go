@@ -16,10 +16,12 @@ const (
 // ManagerObject 全局变量
 var ManagerObject Manager
 
-// Data 本身是一个 struct，用来定义 SessionData 应该具有的属性
-// 但是由于其要实现的不同类型的存储后端所存放 SessionData 的行为是不同的。Redis 还需要 Save 保存一下数据，所以也就需要一个 connection pool 属性；但是 内存的却不需要。既然属性不同，那么就无法公用一个 struct
-// 所以不再约束 SessionData 中的属性，而是约束如何操作 SessionData。而 操作 SessionData 就是实现一些方法。
-// 所有后端都应该可以对 SessionData 执行同样的操作，也就是遵循同一个接口
+// Data 本身是一个 struct，用来定义 SessionData 应该具有的属性。参见 MemorySessionData 这个结构体。
+// MemorySessionData 这个结构体实现了 GetID()、Get()、Set()、Del() 这几个方法。但是现在又有一个新的事物，也要实现这几种方法，就是 RedisSessionData 这个结构体。
+// Redis 与 Memory 存储 SessionData 的方式不同(也就是结构体里的属性不同)，但是对 SessionData 的操作都是那么几个方法。
+// 所以这时候不再约束 XXXSessionData 中的属性要保持一致，而是约束如何操作 SessionData。而操作 SessionData 就是实现一些方法。
+// 这时候，就需要抽象出来一个 Interface，包含两种方式都支持的操作。所有存储方式都应该遵循该接口的定义
+// 此时如果有某些操作在某个事物上不支持，比如 Memory 不持支 Save，那么 MemorySessionData 实现了 Save 之后，直接返回就行，方法内不用写任何代码。
 type Data interface {
 	// 返回自己的SessionID
 	GetID() string
@@ -33,13 +35,14 @@ type Data interface {
 	Save()
 }
 
-// Manager 本身是一个 struct，用来定义 SessionManager 应该具有的属性
-// 但是由于其要实现的存储 SessionData 的后端是一个动态切换的，可以是 RAM、Redis、Mysql 等等
-// 如果是结构体的话，其中的属性要适应所有类型的后端是不可能：
+// Manager 本身是一个 struct，用来定义 SessionManager 应该具有的属性。参见 MemoryManager 这个结构体。
+// 但是由于其要实现的存储 SessionData 的后端是一个动态切换的，可以是 RAM、Redis、Mysql 等等。
 // 比如 RAM 不需要一个 connection pool，但是 Redis 和 mysql 至少需要先创建一个 connection pool(就是打开一个连接)；而 Redis 和 Mysql 的 connection pool 又是不同的~
 // 所以不再约束这些后端应该具有的属性(也就是不再定义一个统一的的结构体),而是约束这些后端的行为(即定义一个统一的接口，这些后端都要实现这些方法，方法就是这些后端的行为)
 // 这些后端的行为，就如下面所示，应该包括这三个：初始化、获取 SessionData、创建 SessionData。
 // 所有存储 SessionData 的后端类型都应该遵循的接口
+// 这里就涉及到一个扩展的思想，最一开始只有 MemoryManager，但是当需要扩展一个新的 Manager 时，就需要给这些 Manager 抽象成统一的接口。
+// 只要这些不管是 Memory、Redis 还是其他的 都具有接口中定义的方法，那么其他人在调用接口的时候，也就不用再关注具体怎么实现的，只要能给我正确的返回值即可。
 type Manager interface {
 	// 用来初始化 connection pool。内存不用初始化，在方法中直接 return 即可，不用执行任何行为
 	// 如果是 Redis，则初始化一个 Redis 的 connection pool。在初始化的时候，提供 Redis 的 IP、Port、密码等信息即可。

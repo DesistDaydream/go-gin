@@ -24,10 +24,11 @@ type RedisSessionData struct {
 }
 
 // NewRedisSessionData 实例化 RedisSessionData
-func NewRedisSessionData(id string) Data {
+func NewRedisSessionData(id string, client *redis.Client) Data {
 	return &RedisSessionData{
-		ID:   id,
-		Data: make(map[string]interface{}, 8),
+		ID:     id,
+		Data:   make(map[string]interface{}, 8),
+		client: client,
 	}
 }
 
@@ -142,8 +143,9 @@ func (r *RedisManager) Init(addr string, options ...string) {
 		DB:       db,
 	})
 
-	_, err = r.client.Ping().Result()
-	panic(err)
+	if _, err = r.client.Ping().Result(); err != nil {
+		panic(err)
+	}
 }
 
 // GetSessionData 获取 SessionID 对应的 SessionData
@@ -168,7 +170,7 @@ func (r *RedisManager) GetSessionData(sessionID string) (d Data, err error) {
 // CreateSession 创建一条 Session 记录
 func (r *RedisManager) CreateSession() (d Data) {
 	uuidObj := uuid.NewV4()
-	d = NewRedisSessionData(uuidObj.String())
+	d = NewRedisSessionData(uuidObj.String(), r.client)
 	r.Session[d.GetID()] = d
 	return
 }

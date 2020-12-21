@@ -32,3 +32,4 @@ practice 是各种中间件练习的入口
 
 # 自己动手写一个实现 Session 的中间件
 [README.md](./session/README.md)
+参考：[老男孩老师在 GitHub 上的代码](https://github.com/Q1mi/ginsession)

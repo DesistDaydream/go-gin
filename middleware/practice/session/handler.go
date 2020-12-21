@@ -34,6 +34,7 @@ func loginHandler(c *gin.Context) {
 			// 拿到 SessionData
 			d := tmpD.(session.Data)
 			d.Set("isLogin", true)
+			d.Save()
 			// 登录成功
 			c.Redirect(http.StatusFound, "/order")
 		} else {
