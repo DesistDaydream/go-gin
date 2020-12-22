@@ -22,6 +22,7 @@ var ManagerObject Manager
 // 所以这时候不再约束 XXXSessionData 中的属性要保持一致，而是约束如何操作 SessionData。而操作 SessionData 就是实现一些方法。
 // 这时候，就需要抽象出来一个 Interface，包含两种方式都支持的操作。所有存储方式都应该遵循该接口的定义
 // 此时如果有某些操作在某个事物上不支持，比如 Memory 不持支 Save，那么 MemorySessionData 实现了 Save 之后，直接返回就行，方法内不用写任何代码。
+// 这里面的接口就很像在学习go时，练习接口那里，只不过这里接口包含的方法更多罢了。见：https://github.com/DesistDaydream/GoLearning/tree/master/practice/interface
 type Data interface {
 	// 返回自己的SessionID
 	GetID() string
