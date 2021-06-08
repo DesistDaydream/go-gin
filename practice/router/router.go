@@ -10,6 +10,8 @@ import (
 
 // InitRouter 初始化路由，设定路由信息
 func InitRouter(r *gin.Engine) {
+	r.Any("/header", handler.HandleHeader)
+	r.Any("/json", handler.HandleJSON)
 
 	r.Any("/", handler.IndexHandler)
 	r.Any("/login", handler.LoginHandler)

@@ -22,7 +22,7 @@ func StockInPost(c *gin.Context) {
 	switch c.PostForm("button") {
 	// 处理入库请求
 	case "入库":
-		if matchResult, _ := regexp.MatchString("^[1-9]\\d*$", c.PostForm("amount")); matchResult == false {
+		if matchResult, _ := regexp.MatchString("^[1-9]\\d*$", c.PostForm("amount")); !matchResult {
 			c.HTML(http.StatusOK, "stock-in.html", gin.H{"err": "请填写大于0的正整数"})
 		} else {
 			i := new(database.StockInOrder)
