@@ -36,6 +36,7 @@ type User struct {
 // 	PM
 // )
 
+// VerifyUser 验证用户是否存在、密码是否正确
 func VerifyUser(name string, password string) (*User, error) {
 	logrus.Info("待验证用户:", name)
 	logrus.Info("待验证密码:", password)
