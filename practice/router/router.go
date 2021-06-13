@@ -13,8 +13,8 @@ func InitRouter(r *gin.Engine) {
 	r.Any("/header", handler.HandleHeader)
 	r.Any("/json", handler.HandleJSON)
 
-	r.Any("/", handler.IndexHandler)
-	r.Any("/login", handler.LoginHandler)
+	r.GET("/", handler.IndexGET)
+	r.POST("/", handler.IndexPOST)
 
 	// 为本程序注册中间件，以便后续页面都只有在认证之后才可以访问
 	r.Use(middleware.AuthMiddleWare)

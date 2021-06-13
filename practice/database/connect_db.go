@@ -38,5 +38,10 @@ func (c *ConnDatabaseInfo) ConnDB() {
 	db.DB().SetConnMaxLifetime(60 * time.Second)
 
 	// 刷新数据表
-	db.AutoMigrate(&StockInOrder{})
+	db.AutoMigrate(&StockInOrder{}, &User{})
+
+	// 创建管理员用户
+	if err := createAdminUser(); err != nil {
+		log.Fatalln(err)
+	}
 }

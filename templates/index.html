@@ -6,9 +6,17 @@
 </head>
 
 <body>
+  {{/* <!-- 下面 {{ XXX }} 的内容可以从代码中传递进来(go模板) --> */}}
+  {{ .err }}
+  {{ .title }}
   <form action="/" method="post">
+    用户名:<input type="text" name="username">
+    密码:<input type="password" name="password">
+
     <input type="submit" name="button" value="登录">
+    <input type="submit" name="button" value="注册">
   </form>
+
   <h1>hello，DesistDaydream</h1>
   <br>
   <script>
