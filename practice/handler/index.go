@@ -32,10 +32,8 @@ func IndexPOST(c *gin.Context) {
 			c.HTML(http.StatusOK, "index.html", gin.H{"err": err})
 		} else {
 			// TODO：
-			// 登录成功，在当前这个用户得 SessionData 保存一个键值对 isLogin=true
-			// 先从上下文中获取 SessionData
-			// 给 SessionData 设置 isLogin=true
-			//
+			// 登录成功后返回 Token。还是前后端分离好写。。。。o(╯□╰)o 分离了之后，把 Token 交给前端处理即可。。。。
+
 			// 跳转到订单页面
 			c.Redirect(http.StatusFound, "/order")
 		}
