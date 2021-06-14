@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/DesistDaydream/GoGin/practice/database"
+	"github.com/DesistDaydream/GoGin/practice/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,12 +28,14 @@ func IndexPOST(c *gin.Context) {
 	switch c.PostForm("button") {
 	case "登录":
 		// 判断用户名和密码是否正确
-		_, err := database.VerifyUser(u.Username, u.Password)
+		userInfo, err := database.VerifyUser(u.Username, u.Password)
 		if err != nil {
 			c.HTML(http.StatusOK, "index.html", gin.H{"err": err})
 		} else {
-			// TODO：
-			// 登录成功后返回 Token。还是前后端分离好写。。。。o(╯□╰)o 分离了之后，把 Token 交给前端处理即可。。。。
+			// 这是一个非常简化的认证方式。生成 JWT，然后将 Token 设置为 Cookie 的值。
+			// 一般情况下，在前后端分离的项目中，直接将生成的 Token 返回给前端即可，具体是用 Cookie 还是用什么方式保存，由前端决定
+			token, _ := middleware.GenerateToken(userInfo)
+			c.SetCookie("token", token, 60, "/", "", false, true)
 
 			// 跳转到订单页面
 			c.Redirect(http.StatusFound, "/order")

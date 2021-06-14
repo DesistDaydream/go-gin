@@ -13,9 +13,10 @@ func AuthMiddleWare(c *gin.Context) {
 	t := time.Now()
 	logrus.Info("认证中间件开始工作")
 
-	// 验证 url 参数中的 token 字段
-	token, _ := c.GetQuery("token")
+	// 从名为 token 的 Cookie 中获取值
+	token, _ := c.Cookie("token")
 
+	// 验证 Token
 	if token == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"status": -1,
