@@ -16,7 +16,9 @@ func AuthMiddleWare(c *gin.Context) {
 	// 从名为 token 的 Cookie 中获取值
 	token, _ := c.Cookie("token")
 
-	// 验证 Token
+	logrus.Info("当前请求的 Token 为：", token)
+
+	// 验证 Token 是否存在
 	if token == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"status": -1,
@@ -27,7 +29,18 @@ func AuthMiddleWare(c *gin.Context) {
 		return
 	}
 
-	logrus.Info("当前请求的 Token 为：", token)
+	// 验证 Token 内容
+	_, err := ParseToken(token)
+	if err != nil {
+		logrus.Error("验证 Token 失败，原因：", err)
+		c.JSON(http.StatusOK, gin.H{
+			"status": -1,
+			"msg":    err,
+			"data":   nil,
+		})
+		c.Abort()
+		return
+	}
 
 	// 执行中间件
 	c.Next()

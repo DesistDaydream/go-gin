@@ -1,10 +1,14 @@
 package middleware
 
 import (
+	"time"
+
 	"github.com/DesistDaydream/GoGin/practice/database"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/sirupsen/logrus"
 )
+
+var mySigningKey = []byte("AllYourBase")
 
 type CustomClaims struct {
 	UserName string `json:"user_name"`
@@ -13,14 +17,12 @@ type CustomClaims struct {
 
 // GenerateToken 生成 JWT
 func GenerateToken(userInfo *database.User) (string, error) {
-	mySigningKey := []byte("AllYourBase")
-
 	// Create the Claims
 	claims := CustomClaims{
 		userInfo.Name,
 		jwt.StandardClaims{
 			Audience:  "",
-			ExpiresAt: 15000,
+			ExpiresAt: time.Now().Add(time.Hour * 2).Unix(),
 			Id:        "",
 			IssuedAt:  0,
 			Issuer:    "desistdaydream",
@@ -36,14 +38,14 @@ func GenerateToken(userInfo *database.User) (string, error) {
 }
 
 // ParseToken 解析 Token
-// func ParseToken(token string) (*jwt.StandardClaims, error) {
-// 	jwtToken, err := jwt.ParseWithClaims(token, &jwt.StandardClaims{}, func(token *jwt.Token) (i interface{}, e error) {
-// 		return []byte(config.Secret), nil
-// 	})
-// 	if err == nil && jwtToken != nil {
-// 		if claim, ok := jwtToken.Claims.(*jwt.StandardClaims); ok && jwtToken.Valid {
-// 			return claim, nil
-// 		}
-// 	}
-// 	return nil, err
-// }
+func ParseToken(tokenString string) (*CustomClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
+		return mySigningKey, nil
+	})
+
+	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
+		return claims, nil
+	}
+
+	return nil, err
+}
