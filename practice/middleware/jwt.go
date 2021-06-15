@@ -8,6 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// 签名所需的私钥。如果想要解析已签名的 Token，则私钥必须相同，否则解析将会失败
 var mySigningKey = []byte("AllYourBase")
 
 type CustomClaims struct {
@@ -15,7 +16,7 @@ type CustomClaims struct {
 	jwt.StandardClaims
 }
 
-// GenerateToken 生成 JWT
+// GenerateToken 生成 Token
 func GenerateToken(userInfo *database.User) (string, error) {
 	// Create the Claims
 	claims := CustomClaims{

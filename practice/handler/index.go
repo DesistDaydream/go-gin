@@ -32,8 +32,8 @@ func IndexPOST(c *gin.Context) {
 		if err != nil {
 			c.HTML(http.StatusOK, "index.html", gin.H{"err": err})
 		} else {
-			// 这是一个非常简化的认证方式。生成 JWT，然后将 Token 设置为 Cookie 的值。
-			// 一般情况下，在前后端分离的项目中，直接将生成的 Token 返回给前端即可，具体是用 Cookie 还是用什么方式保存，由前端决定
+			// 若用户名/密码验证成功，则生成 JWT，并以 Cookie 的形式交给客户端。
+			// 一般情况下，在前后端分离的项目中，直接将生成的 Token 返回给前端即可，具体是用 Cookie 还是用什么方式保存，由前端决定。
 			token, _ := middleware.GenerateToken(userInfo)
 			c.SetCookie("token", token, 60, "/", "", false, true)
 

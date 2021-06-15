@@ -20,11 +20,8 @@ func AuthMiddleWare(c *gin.Context) {
 
 	// 验证 Token 是否存在
 	if token == "" {
-		c.JSON(http.StatusOK, gin.H{
-			"status": -1,
-			"msg":    "请求未携带token，无权限访问",
-			"data":   nil,
-		})
+		logrus.Error("请求未携带token，无权限访问")
+		c.HTML(http.StatusOK, "index.html", gin.H{"err": "请求未携带token，无权限访问"})
 		c.Abort()
 		return
 	}
@@ -33,11 +30,7 @@ func AuthMiddleWare(c *gin.Context) {
 	_, err := ParseToken(token)
 	if err != nil {
 		logrus.Error("验证 Token 失败，原因：", err)
-		c.JSON(http.StatusOK, gin.H{
-			"status": -1,
-			"msg":    err,
-			"data":   nil,
-		})
+		c.HTML(http.StatusOK, "index.html", gin.H{"err": err})
 		c.Abort()
 		return
 	}
