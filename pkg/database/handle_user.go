@@ -103,39 +103,3 @@ func createAdminUser() error {
 	}
 	return nil
 }
-
-// 注册新用户
-func registerUser(name string, tel string, password string, position string) error {
-	user := User{
-		UserID:   xid.New().String(),
-		Name:     name,
-		Tel:      tel,
-		Password: password,
-		Position: position,
-	}
-
-	tx := db.Begin()
-
-	err := tx.Table("users").Create(user).Error
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	// err = tx.Table("roles").Create(&Role{
-	// 	UserID: user.UserID,
-	// }).Error
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	return err
-	// }
-
-	// err = enableUserRole(tx, user.UserID, Admin)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	return err
-	// }
-
-	tx.Commit()
-	return nil
-}

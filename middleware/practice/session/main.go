@@ -12,7 +12,7 @@ import (
 func main() {
 	// 待学习：https://www.bilibili.com/video/BV1B4411w7vv?p=142
 	r := gin.Default()
-	r.LoadHTMLGlob("templates/*")
+	r.LoadHTMLGlob("frontend/*")
 
 	// 使用中间件
 	session.InitManager("redis", "127.0.0.1:6379", "redis", "0")

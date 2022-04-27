@@ -49,13 +49,13 @@ func main() {
 	// 初始化 gin 引擎
 	r := gin.Default()
 	// 加载模板文件
-	r.LoadHTMLGlob("templates/*")
+	r.LoadHTMLGlob("frontend/*")
 
 	// 初始化路由
 	router.InitRouter(r)
 
 	// 设置连接数据库的信息
-	db := new(database.ConnDatabaseInfo)
+	db := new(database.MySQL)
 	db.UserName = "root"
 	db.Password = "mysql"
 	db.Protocol = "tcp"

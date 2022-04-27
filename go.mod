@@ -13,6 +13,7 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/pflag v1.0.5
+	gorm.io/driver/mysql v1.3.3
 	gorm.io/driver/sqlite v1.3.2
 	gorm.io/gorm v1.23.5
 )
