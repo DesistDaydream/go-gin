@@ -10,6 +10,11 @@ import (
 
 // InitRouter 初始化路由，设定路由信息
 func InitRouter(r *gin.Engine) {
+	// 设置 api v1 分组的路由
+	v1 := r.Group("/api/v1")
+	v1.POST("/login", handler.Login)
+
+	// 其他
 	r.Any("/header", handler.HandleHeader)
 	r.Any("/json", handler.HandleJSON)
 
