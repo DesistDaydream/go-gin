@@ -3,7 +3,7 @@ package middleware
 import (
 	"time"
 
-	"github.com/DesistDaydream/GoGin/practice/database"
+	"github.com/DesistDaydream/go-gin/pkg/database"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/sirupsen/logrus"
 )

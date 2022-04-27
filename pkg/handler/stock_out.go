@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"regexp"
 
-	"github.com/DesistDaydream/GoGin/practice/database"
+	"github.com/DesistDaydream/go-gin/pkg/database"
 
 	"github.com/gin-gonic/gin"
 	// mysql驱动

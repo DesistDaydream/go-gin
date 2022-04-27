@@ -44,9 +44,13 @@ func VerifyUser(name string, password string) (*User, error) {
 	var user User
 
 	// 从 users 表中根据 name 字段查询数据，并将查询结果写入到 user 变量中
-	if db.Table("users").Where("name = ?", name).First(&user).RecordNotFound() {
-		return nil, errors.New("账号不存在")
+	if err := db.Table("users").Where("name = ?", name).First(&user).Error; err != nil {
+		return nil, err
 	}
+
+	// if db.Table("users").Where("name = ?", name).First(&user).RecordNotFound() {
+	// 	return nil, errors.New("账号不存在")
+	// }
 
 	// 对比数据库中的密码与登录密码是否一致
 	if user.Password != password {
@@ -58,7 +62,8 @@ func VerifyUser(name string, password string) (*User, error) {
 
 // createAdminUser 创建 admin 用户
 func createAdminUser() error {
-	var count int
+	var count int64
+	// 查询 users 表中是否存在 admin 用户
 	if err := db.Table("users").Count(&count).Error; err != nil {
 		return err
 	}
@@ -96,5 +101,41 @@ func createAdminUser() error {
 
 		tx.Commit()
 	}
+	return nil
+}
+
+// 注册新用户
+func registerUser(name string, tel string, password string, position string) error {
+	user := User{
+		UserID:   xid.New().String(),
+		Name:     name,
+		Tel:      tel,
+		Password: password,
+		Position: position,
+	}
+
+	tx := db.Begin()
+
+	err := tx.Table("users").Create(user).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// err = tx.Table("roles").Create(&Role{
+	// 	UserID: user.UserID,
+	// }).Error
+	// if err != nil {
+	// 	tx.Rollback()
+	// 	return err
+	// }
+
+	// err = enableUserRole(tx, user.UserID, Admin)
+	// if err != nil {
+	// 	tx.Rollback()
+	// 	return err
+	// }
+
+	tx.Commit()
 	return nil
 }

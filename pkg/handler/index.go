@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/DesistDaydream/GoGin/practice/database"
-	"github.com/DesistDaydream/GoGin/practice/middleware"
+	"github.com/DesistDaydream/go-gin/pkg/database"
+	"github.com/DesistDaydream/go-gin/pkg/middleware"
 	"github.com/gin-gonic/gin"
 )
 

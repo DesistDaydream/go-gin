@@ -3,11 +3,11 @@ package main
 import (
 	"os"
 
-	"github.com/DesistDaydream/GoGin/practice/database"
+	"github.com/DesistDaydream/go-gin/pkg/database"
 	"github.com/pkg/errors"
 	"github.com/spf13/pflag"
 
-	"github.com/DesistDaydream/GoGin/practice/router"
+	"github.com/DesistDaydream/go-gin/pkg/router"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"

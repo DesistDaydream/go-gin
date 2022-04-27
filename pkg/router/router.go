@@ -3,8 +3,8 @@ package router
 import (
 	"net/http"
 
-	"github.com/DesistDaydream/GoGin/practice/handler"
-	"github.com/DesistDaydream/GoGin/practice/middleware"
+	"github.com/DesistDaydream/go-gin/pkg/handler"
+	"github.com/DesistDaydream/go-gin/pkg/middleware"
 	"github.com/gin-gonic/gin"
 )
 
