@@ -55,16 +55,17 @@ func main() {
 	router.InitRouter(r)
 
 	// 设置连接数据库的信息
-	db := new(database.MySQL)
-	db.UserName = "root"
-	db.Password = "mysql"
-	db.Protocol = "tcp"
-	db.Server = "0.0.0.0"
-	db.Port = 3306
-	db.Database = "practice"
+	// db := new(database.Sqlite)
+	// db.UserName = "root"
+	// db.Password = "mysql"
+	// db.Protocol = "tcp"
+	// db.Server = "0.0.0.0"
+	// db.Port = 3306
+	// db.Database = "practice"
+	db := database.NewSqlite("test.db")
 	// 连接数据库
 	db.ConnDB()
 
 	// 运行 gin 程序
-	r.Run()
+	r.Run("0.0.0.0:8080")
 }
