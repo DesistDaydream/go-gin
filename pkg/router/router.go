@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 
+	"github.com/DesistDaydream/go-gin/pkg/api"
 	"github.com/DesistDaydream/go-gin/pkg/handler"
 	"github.com/DesistDaydream/go-gin/pkg/middleware"
 	"github.com/gin-gonic/gin"
@@ -10,16 +11,19 @@ import (
 
 // InitRouter 初始化路由，设定路由信息
 func InitRouter(r *gin.Engine) {
-	// 设置 api v1 分组的路由
-	v1 := r.Group("/api/v1")
-	v1.POST("/login", handler.LoginPost)
-
-	// 其他
+	// 测试用
 	r.Any("/header", handler.HandleHeader)
 	r.Any("/json", handler.HandleJSON)
 
-	r.GET("/", handler.IndexGET)
-	r.POST("/", handler.IndexPOST)
+	// 设置 api v1 分组的路由，用于接受前端发起的 POST 请求
+	v1 := r.Group("/api/v1")
+	v1.POST("/login", api.LoginPost)
+
+	v1.Use(middleware.AuthMiddleWare)
+	{
+	}
+
+	// 设置静态资源路由，通常都是 GET 请求
 	r.GET("/login", handler.LoginGet)
 
 	// 注册 js 资源路由
