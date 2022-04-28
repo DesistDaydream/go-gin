@@ -49,7 +49,7 @@ func main() {
 	// 初始化 gin 引擎
 	r := gin.Default()
 	// 加载模板文件
-	r.LoadHTMLGlob("frontend/*")
+	r.LoadHTMLGlob("frontend/*/*")
 
 	// 初始化路由
 	router.InitRouter(r)

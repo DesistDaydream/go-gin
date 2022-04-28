@@ -14,7 +14,12 @@ type LoginResponse struct {
 	Message string `json:"msg"`
 }
 
-func Login(c *gin.Context) {
+// Login Get
+func LoginGet(c *gin.Context) {
+	c.HTML(http.StatusOK, "login.html", nil)
+}
+
+func LoginPost(c *gin.Context) {
 	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 
 	// 用来绑定用户登录时填写的用户名和密码

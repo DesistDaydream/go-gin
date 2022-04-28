@@ -22,13 +22,13 @@ loginForm.onsubmit = function (e) {
     xhr.onload = function () {
         console.log(xhr.responseText)
         // 根据响应体中的信息，更新页面
-        // let resp = JSON.parse(xhr.responseText)
-        // if (resp.code === 1) {
-        //     // 登录成功后，跳转到其他页面
-        //     window.location.href = "./order.html"
-        // } else {
-        //     errBox.style.display = 'block'
-        // }
+        let resp = JSON.parse(xhr.responseText)
+        if (resp.code === 1) {
+            // 登录成功后，跳转到其他页面
+            window.location.href = "./order"
+        } else {
+            errBox.style.display = 'block'
+        }
     }
     xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded")
     xhr.send('username=' + name + '&password=' + pwd)

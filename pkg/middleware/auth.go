@@ -21,7 +21,7 @@ func AuthMiddleWare(c *gin.Context) {
 	// 验证 Token 是否存在
 	if token == "" {
 		logrus.Error("请求未携带token，无权限访问")
-		c.HTML(http.StatusOK, "index.html", gin.H{"err": "请求未携带token，无权限访问"})
+		c.HTML(http.StatusOK, "login.html", gin.H{"err": "请求未携带token，无权限访问"})
 		c.Abort()
 		return
 	}

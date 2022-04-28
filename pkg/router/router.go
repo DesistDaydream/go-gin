@@ -12,7 +12,7 @@ import (
 func InitRouter(r *gin.Engine) {
 	// 设置 api v1 分组的路由
 	v1 := r.Group("/api/v1")
-	v1.POST("/login", handler.Login)
+	v1.POST("/login", handler.LoginPost)
 
 	// 其他
 	r.Any("/header", handler.HandleHeader)
@@ -20,6 +20,10 @@ func InitRouter(r *gin.Engine) {
 
 	r.GET("/", handler.IndexGET)
 	r.POST("/", handler.IndexPOST)
+	r.GET("/login", handler.LoginGet)
+
+	// 注册 js 资源路由
+	r.GET("/frontend/js/login.js", handler.JSGet)
 
 	// 为本程序注册中间件，以便后续页面都只有在认证之后才可以访问
 	r.Use(middleware.AuthMiddleWare)
