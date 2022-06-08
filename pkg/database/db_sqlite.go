@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// MySQL 数据库连接信息
+// Sqilte 数据库连接信息
 type Sqlite struct {
 	Database string
 }
