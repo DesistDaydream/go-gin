@@ -5,14 +5,14 @@ package main
 import (
 	"net/http"
 
-	"github.com/DesistDaydream/GoGin/middleware/session"
+	"github.com/DesistDaydream/go-gin/middleware/session"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	// 待学习：https://www.bilibili.com/video/BV1B4411w7vv?p=142
 	r := gin.Default()
-	r.LoadHTMLGlob("frontend/*")
+	r.LoadHTMLGlob("web/*")
 
 	// 使用中间件
 	session.InitManager("redis", "127.0.0.1:6379", "redis", "0")

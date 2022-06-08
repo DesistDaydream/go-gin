@@ -27,7 +27,7 @@ func InitRouter(r *gin.Engine) {
 	r.GET("/login", handler.LoginGet)
 
 	// 注册 js 资源路由
-	r.GET("/frontend/js/login.js", handler.JSGet)
+	r.GET("/web/js/login.js", handler.JSGet)
 
 	// 为本程序注册中间件，以便后续页面都只有在认证之后才可以访问
 	r.Use(middleware.AuthMiddleWare)

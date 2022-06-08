@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/DesistDaydream/GoGin/middleware/session"
+	"github.com/DesistDaydream/go-gin/middleware/session"
 	"github.com/gin-gonic/gin"
 )
 
