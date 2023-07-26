@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis"
-	uuid "github.com/satori/go.uuid"
+	"github.com/google/uuid"
 )
 
 // RedisSessionData 表示一个用户的 SessionData 应该具有的属性
@@ -81,7 +81,6 @@ func (r *RedisSessionData) Save() {
 	}
 	// 将数据保存到 Redis
 	r.client.Set(r.ID, value, time.Second*time.Duration(r.expired))
-	return
 }
 
 // RedisManager 存储 SessionData 的 Redis 后端管理器
@@ -169,7 +168,7 @@ func (r *RedisManager) GetSessionData(sessionID string) (d Data, err error) {
 
 // CreateSession 创建一条 Session 记录
 func (r *RedisManager) CreateSession() (d Data) {
-	uuidObj := uuid.NewV4()
+	uuidObj := uuid.New()
 	d = NewRedisSessionData(uuidObj.String(), r.client)
 	r.Session[d.GetID()] = d
 	return

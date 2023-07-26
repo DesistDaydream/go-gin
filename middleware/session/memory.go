@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 
-	uuid "github.com/satori/go.uuid"
+	"github.com/google/uuid"
 )
 
 // MemorySessionData 表示一个用户的 SessionData 应该具有的属性
@@ -61,7 +61,6 @@ func (m *MemorySessionData) Del(key string) {
 
 // Save 保存 SessionData
 func (m *MemorySessionData) Save() {
-	return
 }
 
 // MemoryManager 是一个全局的 Session 管理
@@ -79,7 +78,6 @@ func NewMemoryManager() Manager {
 
 // Init 初始化
 func (m *MemoryManager) Init(addr string, options ...string) {
-	return
 }
 
 // GetSessionData 根据 SessionID 找到对应的 Data
@@ -100,7 +98,7 @@ func (m *MemoryManager) GetSessionData(sessionID string) (d Data, err error) {
 // CreateSession 创建一条 Session 记录
 func (m *MemoryManager) CreateSession() (d Data) {
 	// 造一个 SessionID
-	uuidObj := uuid.NewV4()
+	uuidObj := uuid.New()
 	// 造一个和 sessionID 对应的 SessionData
 	d = NewMemorySessionData(uuidObj.String())
 	// 将创建的 SessionID 保存到 SessionData 中
