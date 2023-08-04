@@ -8,8 +8,9 @@ import (
 )
 
 // LoginForm 该结构体属性中的TAG，用来作为bind的依据。
-// form:"user" 表示User与表单中的user绑定
-// binding:"required" 是一个规则修饰符，gin读取到的时候，表明该属性必须绑定，如果字段为空，则会报错。
+// - form:"user" 表示User与表单中的user绑定
+// - binding:"required" 是一个规则修饰符，gin读取到的时候，表明该属性必须绑定，如果字段为空，则会报错。
+// Gin 默认规定使用 form 这个 Tag 作为绑定的依据。只有具有 form Tag 的字段才会与请求时传入的各种参数（URL 的 Query、请求体、等等）相关联。
 type LoginForm struct {
 	User     string `form:"user" binding:"required"`
 	Password string `form:"password" binding:"required"`

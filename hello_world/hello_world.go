@@ -17,9 +17,10 @@ func PingGet(c *gin.Context) {
 }
 
 func main() {
-	// 可以使用 gin.Default() 或 gin.New() 创建 gin 引擎实例。区别在于 gin.Default() 使用 gin.New() 创建 engine 实例，并额外使用了 Logger() 和 Recover() 中间件。
-	// Logger() 是负责进行打印并输出日志的中间件,方便开发者进行程序调试;比如当客户端访问 gin 开发的应用时，会输出本次访问的信息。
-	// Recovery() 中间件的作如果程序执行过程中遇到panc中断了服务,则 Recovery会恢复程序执行,并返回服务器500内误。
+	// 可以使用 gin.Default() 或 gin.New() 创建 gin 引擎实例。
+	// 区别在于 gin.Default() 使用 gin.New() 创建 engine 实例，并额外使用了 Logger() 和 Recover() 中间件。
+	// - Logger() 是负责进行打印并输出日志的中间件,方便开发者进行程序调试;比如当客户端访问 gin 开发的应用时，会输出本次访问的信息。
+	// - Recovery() 中间件的作如果程序执行过程中遇到panc中断了服务,则 Recovery会恢复程序执行,并返回服务器500内误。
 	// 通常情况下,我们使用 gin.Defaul() 创建 Engine 实例。
 	r := gin.Default()
 

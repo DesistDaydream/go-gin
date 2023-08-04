@@ -32,9 +32,14 @@ func GenerateToken(userInfo *database.User) (string, error) {
 		},
 	}
 
+	// 生成 Token
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	// 使用私钥加密(签名) Token
 	token, _ := jwtToken.SignedString(mySigningKey)
+
 	logrus.Debugf("%v 用户生成的 Token 为 %v\n", userInfo.Name, token)
+
 	return token, nil
 }
 
