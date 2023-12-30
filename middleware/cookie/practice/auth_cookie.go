@@ -13,7 +13,7 @@ import (
 
 func login(c *gin.Context) {
 	// 设置 cookie
-	c.SetCookie("admin", "123456", 30, "/", "datalake.cn", false, true)
+	c.SetCookie("admin", "123456", 30, "/", "", false, true)
 	c.String(200, "Login Success!")
 }
 
